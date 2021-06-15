@@ -1,23 +1,23 @@
-/* loading message */
+/* change JS error message to a loading message */
 $('#colorPreviewText').html('Loading...');
 
 
 
 
 
-/* color picker with gradient preview */
+/* colour picker with gradient preview */
 let color1, color2;
 
 function updateColors() {
 	color1 = $('#colorSel1').val();
 	color2 = $('#colorSel2').val();
-	$('#colorPreview').css({'background': 'linear-gradient(90deg, ' + color1 + ', ' + color2 + ')'});
 	$('#colorPreviewText').html(color1 + '　→　' + color2);
+	$('#colorPreview').css({'background': 'linear-gradient(90deg, ' + color1 + ', ' + color2 + ')'});
 };
 
 $('#colorSel1,#colorSel2').on('change', function() { updateColors(); });
 
-/* copy color on right click */
+/* copy colour on right click */
 $('#colorBtn1').bind('contextmenu', function(cmenu) {
     cmenu.preventDefault();
 	navigator.clipboard.writeText(color1);
@@ -30,6 +30,25 @@ $('#colorBtn2').bind('contextmenu', function(cmenu) {
 	$('#colorPreviewText').html(color1 + '　→　' + '＊COPIED!＊');
 	setTimeout(function () { updateColors(); }, 500);
 });
+
+/* random colours */
+function rndColors() {
+	var hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f']
+
+	var rndColorValues = ['',''];
+	
+	/* count values for color1 and color2 at the same time */
+	while(rndColorValues[0].length + rndColorValues[1].length < 12) {
+		rndColorValues[0] += hexNums[Math.round( Math.random() * 15 )];
+		rndColorValues[1] += hexNums[Math.round( Math.random() * 15 )];
+	};
+	$('#colorSel1').val('#' + rndColorValues[0]);
+	$('#colorSel2').val('#' + rndColorValues[1]);
+
+	updateColors();
+};
+
+$('#rndColorsBtn').on('click', function() { rndColors(); });
 
 
 
@@ -66,11 +85,16 @@ cLenghtDefaulter();
 
 /* create a prompt when "Custom..." cLenght btn is clicked */
 $('#cLenght3').on('click', function() {
-	stepLen = prompt('Please enter a chain custom lenght (any integer equal or more than 3)', stepLen);
+	if ($('#cLenghtBtn3').html() != "Custom...") {
+		stepLen = prompt('Please enter a custom length (any integer equal or more than 3)', parseInt( $('#cLenghtBtn3').html().replace("Custom (", "").replace(")", "") ));
+	} else {
+		stepLen = prompt('Please enter a custom length (any integer equal or more than 3)', stepLen);
+	};
 	
 	/* process amogus */
-	if (stepLen == 'amogus') {
-		alert('OH MY GOD THE CHAIN IS SUS HAHA :D :D LOL AMOGUS MEME SO FUNNY SUS SUS SUSSY HAHAHAHAHA :DDDDD');
+	if (stepLen == 'amogus' | stepLen == 'sus') {
+		alert('OH MY GOD THE CHAIN IS SUS HAHA :D :D LOL AMOGUS MEME SO FUNNY SUS SUS SUSSY LMAO HAHAHAHAHA :DDDDD');
+		$("#ggBtn, label, h1, h2, a, em").html("ｓｕｓ");
 		cLenghtDefaulter();
 	};
 	
@@ -123,7 +147,7 @@ function updateSteps() {
 	/* wipe previous steps */
 	steps = [];
 
-	/* the first color is just color1, no need to count it */
+	/* the first step is just color1, no need to count it */
 	steps.push(hexToRgb(color1));
 
 	var stepCount = 1;
@@ -132,9 +156,9 @@ function updateSteps() {
 		/* math sorcery goes here (daaamn i hate math >_<).
 		in a nutshell: since we already know first and last steps, we're starting from the second (1) step and counting until the pre-last one (this is why we're substracting 1 from stepLen). 
 
-		since every step in a chain as a sum of color1 and color2 in some proportion (i.e. second step in 9-step-long chain has 87.5% of color1 and 12.5% of color2), we can calculate step X's formula as (color1*(L-X) + color2*X); L is the chain lenght.
+		since every step in a chain as a sum of color1 and color2 in some proportion (i.e. second step in 9-step-long chain has 87.5% of color1 and 12.5% of color2), we can calculate step X's formula as (color1*(L-X) + color2*X); L is the chain length.
 
-		thus, we multiply first color on its per-step percentage (i.e. 8-1/8 = 7/8 = 0.875) and add to it the second color multiplied on its per-step percentage (i.e. 1/8 = 0.125). perform this for Red, Green and Blue values and voila! */
+		thus, we multiply first colour on its per-step percentage (i.e. 8-1/8 = 7/8 = 0.875) and add to it the second colour multiplied on its per-step percentage (i.e. 1/8 = 0.125). perform this for Red, Green and Blue values and voila! */
 		steps.push([ 
 			( hexToRgb(color1)[0] * (((stepLen - 1) - stepCount) / (stepLen - 1)) ) + ( hexToRgb(color2)[0] * (stepCount / (stepLen - 1)) ),
 			( hexToRgb(color1)[1] * (((stepLen - 1) - stepCount) / (stepLen - 1)) ) + ( hexToRgb(color2)[1] * (stepCount / (stepLen - 1)) ),
@@ -142,7 +166,7 @@ function updateSteps() {
 		]);
 		stepCount += 1;
 	};
-	/* and the last color is just color2, no need to count it either */
+	/* and the last step is just color2, no need to count it either */
 	steps.push(hexToRgb(color2));
 }
 
@@ -151,11 +175,12 @@ function updateSteps() {
 
 
 function genBlocks() {
-	console.log('[c] Starting blocks gradient generation... ');
-	console.log(steps);
+	console.log('[g] Starting blocks gradient generation... ');
 
-	/* wipe all the blocks previously visualized */
-	$( ".visImg" ).remove();
+	/* wipe all the blocks previously visualized if "optRKeep" is NOT enabled */
+	if (! $('#optRKeep').is(':checked')) {
+		$( ".visImg" ).remove();
+	};
 	
 	/* wipe previous step leaders */
 	var stepLeaders = [];
@@ -178,7 +203,7 @@ function genBlocks() {
 			var calcB = 255 - Math.abs(currentStep[2] - currentBlock[3]);
 			calcB /= 255;
 
-			/* 0.0 means 'completely opposite colours', 1.0 means 'same colours'. Values <0.7 in 99% of cases are junk */
+			/* 0.0 means 'completely opposite colours', 1.0 means 'same colours'. Values <0.8 in 99% of cases are junk */
 			var currentComparison = [currentBlock[0], (calcR + calcG + calcB) / 3];
 
 			blockCount -= 1;
@@ -190,35 +215,49 @@ function genBlocks() {
 	
 	/* write current step leader to a corresponding stepLeaderX variable */
 	stepLeaders.push(stepLeaderboard[0]);
-	console.log('AAAND THE WINNER OF STEP ' + stepCount + ' IS ' + stepLeaders[stepCount] + ' !!!');
+	console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS ' + stepLeaders[stepCount] + ' !!!');
 
 	/* visualize step leader block */
 	var stepVis = $('<img class="visImg">');
+	
+	/* hide duplicates if "optNodub" is enabled */
+	if ($('#optNodub').is(':checked')) { if (stepCount > 0) {
+		if (stepLeaders[stepCount] == stepLeaders[stepCount -1]) {
+			console.log(stepLeaders[stepCount] == stepLeaders[stepCount -1]);
+			stepVis.css('display', 'none');
+	}}};
+
 	stepVis.attr('src', './data/input/' + stepLeaders[stepCount]);
-	stepVis.attr('title', stepLeaders[stepCount].replace('.png', ''));
+	stepVis.attr('title', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
+	stepVis.css('width', visSize + 'px');
+	stepVis.css('height', visSize + 'px');
 	stepVis.appendTo('#visResult');
 
 	/* move to the next step */
 	stepCount += 1;
 	};
-	console.log('[c] Blocks gradient generated successfully.');
+	console.log('[g] Blocks gradient generated successfully.');
 };
 
 
 
 
 
-/* upscale/downscale buttons */
-$('#visDownscale').on('click', function() { 
-	if (parseInt($('.visImg').css('width')) >= 32) {
-	$('.visImg').css({'width': parseInt($('.visImg').css('width')) * 0.5 + 'px'});
-	$('.visImg').css({'height': parseInt($('.visImg').css('height')) * 0.5 + 'px'});
+/* visualisation upscale/downscale buttons */
+var visSize = 64;
+
+$('#visDownscale').on('click', function() { if (visSize > 16) {
+	visSize /= 2;
+	$('.visImg').css('width', visSize + 'px');
+	$('.visImg').css('height', visSize + 'px');
 }});
-$('#visUpscale').on('click', function() { 
-	if (parseInt($('.visImg').css('width')) <= 128) {
-		$('.visImg').css({'width': parseInt($('.visImg').css('width')) * 2 + 'px'});
-		$('.visImg').css({'height': parseInt($('.visImg').css('height')) * 2 + 'px'});
+$('#visUpscale').on('click', function() { if (visSize < 256) {
+	visSize /= 0.5;
+	$('.visImg').css('width', visSize + 'px');
+	$('.visImg').css('height', visSize + 'px');
 }});
+
+
 
 
 
@@ -238,15 +277,15 @@ function genGradient() {
 /* handle blocks from output.js */
 blockImportCount = blockLen;
 
-
-
-
-
 /* init console message */
 console.log('*boop* main script initialized');
 
-/* enable GG button when the script is ready */
-$("#ggBtn").prop("disabled", false);
-
-/* update colors just for sure (required in some cases) */
-setTimeout(function () { updateColors(); }, 500);
+$(document).ready(function() {
+	/* randomize colours on startup if no cached colours available */
+	color1 = $('#colorSel1').val();
+	color2 = $('#colorSel2').val();
+	if (color1 == '#000000', color2 == '#000000') { rndColors(); };
+	
+	/* enable GG button when the script is ready */
+	$("#ggBtn").prop("disabled", false);
+});

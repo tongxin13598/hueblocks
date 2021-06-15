@@ -11,7 +11,8 @@
 	<h2>Create beautiful blocks gradients in a few clicks!</h2>
 		<div class="colorPicker">
 			<div id="colorPreview" style="background: #4b5a70;">
-				<div id="colorBtn1"><input type="color" id="colorSel1" value="#e60c0c"></div><p id="colorPreviewText">Oh no! Something is wrong with JavaScript :(</p><div id="colorBtn2"><input type="color" id="colorSel2" value="#713dec"></div>
+				<div id="colorBtn1"><input type="color" id="colorSel1" v="#ff8714"></div><p id="colorPreviewText">Oh no! Something is wrong with JavaScript :(</p><div id="colorBtn2"><input type="color" id="colorSel2" v="#842571"></div>
+				<button id="rndColorsBtn"><img src="./icon/random.svg" title="Random colours"></img></button>
 		</div><br><em>(left click on the left/right side of the bar to change its color; right click to copy color)</em></div>
 		<div class="configs">
 			<div class="lenghtPicker"><h2>Gradient chain lenght:</h2>
@@ -19,14 +20,14 @@
 				</label><input type="radio" name="cLenght" id="cLenght2"><label for="cLenght2" id="cLenghtBtn2">25 blocks
 				</label><input type="radio" name="cLenght" id="cLenght3"><label for="cLenght3" id="cLenghtBtn3">Custom...</label></div>
 			<div class="options">
-				<input type="checkbox" name="optNodub" id="optNodub" checked="checked"><label for="optNodub" id="optNodubBtn">Hide duplicates</label><br>
-				<input type="checkbox" name="optAlts" id="optAlts"><label for="optAlts" id="optAltsBtn">Currently useless :(</label>
+				<input type="checkbox" name="optNodub" id="optNodub"><label for="optNodub" id="optNodubBtn">Hide duplicates</label><br>
+				<input type="checkbox" name="optRKeep" id="optRKeep"><label for="optRKeep" id="optRKeepBtn">Keep previous results</label>
 				<p class="credits">by <a href="https://github.com/1280px/">1280px</a>, 2021 | <a href="https://github.com/1280px/hueblocks/">source code</a></p>
 
 		</div></header>
 		
 	<div class="ggBtnHandler"><button id="ggBtn" disabled="true">GENERATE BLOCKS GRADIENT</button></div>
-	<div class="visScaleBtns"><button id="visDownscale"><img src="./icon/zoom-out.svg"></img></button><button id="visUpscale"><img src="./icon/zoom-in.svg"></img></button></div>
+	<div class="visScaleBtns"><button id="visDownscale"><img src="./icon/zoom-out.svg" title="Downscale (0.5x)"></img></button><button id="visUpscale"><img src="./icon/zoom-in.svg" title="Upscale (2.0x)"></img></button></div>
 	<div id="visResult"></div>
 
 <script src="jquery-3.6.0.min.js"></script>
