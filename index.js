@@ -173,20 +173,23 @@ function updateSteps() {
 
 
 
+/* block generation */
+var stepLeaders = [];
+var stepCount = 0;
 
 function genBlocks() {
 	console.log('[g] Starting blocks gradient generation... ');
 
-	/* wipe all the blocks previously visualized if "optRKeep" is NOT enabled */
+	/* wipe all the blocks previously visualised if "optRKeep" is NOT enabled */
 	if (! $('#optRKeep').is(':checked')) {
 		$( ".visImg" ).remove();
 	};
 	
 	/* wipe previous step leaders */
-	var stepLeaders = [];
+	stepLeaders = [];
 	
 	/* compare all the blocks from list to a given step */
-	var stepCount = 0;
+	stepCount = 0;
 
 	while(stepCount <= (stepLen - 1)) {
 		var currentStep = steps[stepCount];
@@ -217,27 +220,29 @@ function genBlocks() {
 	stepLeaders.push(stepLeaderboard[0]);
 	console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS ' + stepLeaders[stepCount] + ' !!!');
 
-	/* visualize step leader block */
-	var stepVis = $('<img class="visImg">');
-	
-	/* hide duplicates if "optNodub" is enabled */
+	/* check for duplicate if "optNodub" is enabled and visualise block */
 	if ($('#optNodub').is(':checked')) { if (stepCount > 0) {
-		if (stepLeaders[stepCount] == stepLeaders[stepCount -1]) {
-			console.log(stepLeaders[stepCount] == stepLeaders[stepCount -1]);
-			stepVis.css('display', 'none');
-	}}};
-
-	stepVis.attr('src', './data/input/' + stepLeaders[stepCount]);
-	stepVis.attr('title', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
-	stepVis.css('width', visSize + 'px');
-	stepVis.css('height', visSize + 'px');
-	stepVis.appendTo('#visResult');
+		if (stepLeaders[stepCount] != stepLeaders[stepCount -1]) {
+			blockVis();
+	}}} else {
+		blockVis();
+	};
 
 	/* move to the next step */
 	stepCount += 1;
 	};
 	console.log('[g] Blocks gradient generated successfully.');
 };
+
+/* block visualisation */
+function blockVis() {
+	var stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
+	stepVis.attr('src', './data/input/' + stepLeaders[stepCount]);
+	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
+	stepVis.css('width', visSize + 'px');
+	stepVis.css('height', visSize + 'px');
+	stepVis.appendTo('#visResult');
+}
 
 
 
@@ -256,6 +261,18 @@ $('#visUpscale').on('click', function() { if (visSize < 256) {
 	$('.visImg').css('width', visSize + 'px');
 	$('.visImg').css('height', visSize + 'px');
 }});
+
+/* update and show popup when block is hovered */
+function showPopup(e) {
+	$('#visPopup').html($(e).attr('blockname'));
+	$('#visPopup').css('left', e.x + 4).css('top', e.y + 4);
+	$('#visPopup').show();
+};
+
+/* hide popup when block is not hovered */
+function hidePopup(e) {
+	$('#visPopup').hide();
+};
 
 
 
@@ -281,10 +298,10 @@ blockImportCount = blockLen;
 console.log('*boop* main script initialized');
 
 $(document).ready(function() {
-	/* randomize colours on startup if no cached colours available */
+	/* randomize colours on startup if no cached colours available; otherwise just update colors */
 	color1 = $('#colorSel1').val();
 	color2 = $('#colorSel2').val();
-	if (color1 == '#000000', color2 == '#000000') { rndColors(); };
+	if (color1 == '#000000', color2 == '#000000') { rndColors(); } else { updateColors(); };
 	
 	/* enable GG button when the script is ready */
 	$("#ggBtn").prop("disabled", false);
