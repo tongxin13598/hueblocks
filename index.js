@@ -218,20 +218,20 @@ function genBlocks() {
 	
 	/* write current step leader to a corresponding stepLeaderX variable */
 	stepLeaders.push(stepLeaderboard[0]);
-	console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS ' + stepLeaders[stepCount] + ' !!!');
+	//console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS "' + stepLeaders[stepCount] + '" !!!');
 
 	/* check for duplicate if "optNodub" is enabled and visualise block */
-	if ($('#optNodub').is(':checked')) { if (stepCount > 0) {
+	if ($('#optNodub').is(':checked') && stepCount > 0) {
 		if (stepLeaders[stepCount] != stepLeaders[stepCount -1]) {
 			blockVis();
-	}}} else {
+	}} else {
 		blockVis();
 	};
 
 	/* move to the next step */
 	stepCount += 1;
 	};
-	console.log('[g] Blocks gradient generated successfully.');
+	console.log('[v] Blocks gradient visualised successfully.');
 };
 
 /* block visualisation */
