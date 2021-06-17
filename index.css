@@ -244,7 +244,8 @@ a:hover:active {
 }
 .visImg {
 	width: 64px;	height: 64px;
-	image-rendering: crisp-edges;
+	image-rendering: pixelated;       /* fallback for Chromium-like browsers */
+	image-rendering: crisp-edges;     /* rule for Firefox-like browsers */
 	margin-bottom: -4px;
 }
 #visPopup {
