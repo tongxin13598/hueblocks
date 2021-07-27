@@ -1,0 +1,1 @@
+All the textures provided are taken directly from Minecraft Java Edition 1.12.2 and owned by Mojang Studios. I do not claim any rights on these, and all the textures provided are used only for demonstration purposes!
