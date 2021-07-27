@@ -33,7 +33,7 @@ $('#colorBtn2').bind('contextmenu', function(cmenu) {
 
 /* random colours */
 function rndColors() {
-	var hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f']
+	const hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f']
 
 	var rndColorValues = ['',''];
 	
@@ -194,20 +194,20 @@ function genBlocks() {
 	while(stepCount <= (stepLen - 1)) {
 		var currentStep = steps[stepCount];
 		var stepLeaderboard = ["missingNo", 0];
-		var blockCount = blockLen;
+		var blockCount = blockData.length -1;
 		while(blockCount >= 0) {
-			var currentBlock = eval('block' + blockCount);
+			var currentBlock = blockData[blockCount];
 
 			/* count similarity for Red, Green and Blue */
-			var calcR = 255 - Math.abs(currentStep[0] - currentBlock[1]);
+			var calcR = 255 - Math.abs(currentStep[0] - currentBlock.rgb[0]);
 			calcR /= 255;
-			var calcG = 255 - Math.abs(currentStep[1] - currentBlock[2]);
+			var calcG = 255 - Math.abs(currentStep[1] - currentBlock.rgb[1]);
 			calcG /= 255;
-			var calcB = 255 - Math.abs(currentStep[2] - currentBlock[3]);
+			var calcB = 255 - Math.abs(currentStep[2] - currentBlock.rgb[2]);
 			calcB /= 255;
 
-			/* 0.0 means 'completely opposite colours', 1.0 means 'same colours'. Values <0.8 in 99% of cases are junk */
-			var currentComparison = [currentBlock[0], (calcR + calcG + calcB) / 3];
+			/* 0.0 means 'completely opposite colour', 1.0 means 'same colour'. Values <0.8 in 99% of cases are junk */
+			var currentComparison = [currentBlock.id, (calcR + calcG + calcB) / 3];
 
 			blockCount -= 1;
 
@@ -218,7 +218,7 @@ function genBlocks() {
 	
 	/* write current step leader to a corresponding stepLeaderX variable */
 	stepLeaders.push(stepLeaderboard[0]);
-	//console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS "' + stepLeaders[stepCount] + '" !!!');
+	// console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS "' + stepLeaders[stepCount] + '" !!!');
 
 	/* check for duplicate if "optNodub" is enabled and visualise block */
 	if ($('#optNodub').is(':checked') && stepCount > 0) {
@@ -234,10 +234,14 @@ function genBlocks() {
 	console.log('[v] Blocks gradient visualised successfully.');
 };
 
+
+
+
+
 /* block visualisation */
 function blockVis() {
 	var stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
-	stepVis.attr('src', './data/input/' + stepLeaders[stepCount]);
+	stepVis.attr('src', './data/' + blocksType + '/' + stepLeaders[stepCount]);
 	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
 	stepVis.css('width', visSize + 'px');
 	stepVis.css('height', visSize + 'px');
@@ -277,26 +281,132 @@ function hidePopup(e) {
 
 
 
+/* default values for block types and data */
+var blocksType = 'blocks';
+var blockData = eval('blocks');
+var presetsLocation = eval('presets');
+
+/* presets importer */
+function presetImport () {
+	/* wipe previous presets */
+	$( "option" ).remove();
+	
+	/* create 'Default (1.17.1 blocks)' option if blocksType = blocks */
+	if (blocksType == 'blocks') {
+		$('#blocksPresetDD').append(
+			$(document.createElement('option')).prop({
+				value: 'blocks',
+				text: 'Default (1.17.1 blocks)' 
+		}));
+	$('#blocksPresetDD').val('blocks');
+	blockData = eval( $('#blocksPresetDD').val() );
+	};
+
+	/* create 'Default (1.12.2 blocks)' option if blocksType = blocks_pa */
+	if (blocksType == 'blocks_pa') {
+		$('#blocksPresetDD').append(
+			$(document.createElement('option')).prop({
+				value: 'blocks_pa',
+				text: 'Default (1.12.2 blocks)'
+		}));
+	$('#blocksPresetDD').val('blocks_pa');
+	blockData = eval( $('#blocksPresetDD').val() );
+	};
+	
+	var presetImporter = 0;
+	
+	if (blocksType == 'blocks') { presetsLocation = eval('presets'); };
+	if (blocksType == 'blocks_pa') { presetsLocation = eval('presets_pa'); };
+
+	while(presetImporter < presetsLocation.length) {
+		
+		$('#blocksPresetDD').append(
+			$(document.createElement('option')).prop({
+				value: presetsLocation[presetImporter]['value'],
+				text: presetsLocation[presetImporter]['text']
+			}));
+		presetImporter += 1;
+	}
+	
+	/* when all the presets imported, add 'Custom blocks...' option
+	$('#blocksPresetDD').append(
+		$(document.createElement('option')).prop({
+			value: 'custom',
+			text: 'Custom blocks...'
+		})); */
+};
+
+presetImport();
+
+
+
+
+
+/* preset selector */
+$('#blocksPresetDD').change(function () {
+	if ($('#blocksPresetDD').val() != 'custom') {
+		console.log('[p] changed preset to "' + $('#blocksPresetDD').val() + '"');
+		blockData = eval( $('#blocksPresetDD').val() );
+}});
+
+
+
+
+
+/* custom blocks screen */
+$('#blocksPresetDD').change(function () {
+	if ($('#blocksPresetDD').val() == 'custom') {
+		console.log('[p] custom preset screen selected, waiting for preset...');
+		
+		$('#blocksSelScreen').fadeIn(300);
+	}
+});
+
+/* custom blocks screen cancel button */
+$('#blocksSelScreenClose').on('click', function() {
+	$('#blocksPresetDD').val('blocks');
+	console.log('[p] custom preset screen cancelled, reverted to "' + $('#blocksPresetDD').val() + '"');
+	blockData = eval( $('#blocksPresetDD').val() );
+
+	$('#blocksSelScreen').fadeOut(300);
+});
+
+
+
+
+
+/* blocks type switcher ('blocks' -- Jappa-nese *badum-tss* textures | 'blocks_pa' -- Programmer's Art textures */
+function blocksTypeSwitch () {
+	if ($('#blocksTypeSwitcher').is(':checked')) { blocksType = 'blocks_pa'; }
+	if (! $('#blocksTypeSwitcher').is(':checked')) { blocksType = 'blocks'; }
+
+	presetImport();
+	console.log('[p] blocks type changed to "' + blocksType + '", reverted to "' + $('#blocksPresetDD').val() + '"');
+};
+
+$('#blocksTypeSwitcher').on('click', function() { blocksTypeSwitch(); });
+
+
+
+
 
 /* finally, process GG button */
 $('#ggBtn').on('click', function() { genGradient(); });
 function genGradient() {
-	$("#ggBtn").prop("disabled", true)
+	$('#ggBtn').prop('disabled', true);
 	updateSteps();
 	genBlocks();
-	$("#ggBtn").prop("disabled", false)
+	$('#ggBtn').prop('disabled', false);
 };
 
 
 
 
 
-/* handle blocks from output.js */
-blockImportCount = blockLen;
-
 /* init console message */
 console.log('*boop* main script initialized');
 
+/* le final countdown */
 $(document).ready(function() {
 	/* randomize colours on startup if no cached colours available; otherwise just update colors */
 	color1 = $('#colorSel1').val();
