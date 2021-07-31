@@ -220,8 +220,4 @@ var blocks_pa = [
 	{ id: "bedrock.png", rgb: [84, 84, 84] }
 ];
 
-
-
-
-
 console.log("*beep* blocks_pa.js values initialized");
