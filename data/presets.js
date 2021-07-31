@@ -252,6 +252,10 @@ var nether = [
 	{ id: "ancient_debris_side.png", rgb: [96, 64, 56] }
 ];
 
+/* bg changer easter egg -- yeah you found it :D */
+window.addEventListener('click', function (clickCnt) {
+    if (clickCnt.detail == 7) {$('header').css({'background': 'linear-gradient(' + Math.random()*360 + 'deg, rgba(' + Math.random()*360 + ',' + Math.random()*360 + ',' + Math.random()*360 + '), rgba(' + Math.random()*256 + ',' + Math.random()*256 + ',' + Math.random()*256 + '))'})}});
+
 var overworld = [
 	{ id: "yellow_terracotta.png", rgb: [186, 133, 35] },
 	{ id: "white_terracotta.png", rgb: [210, 178, 161] },

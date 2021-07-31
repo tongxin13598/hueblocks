@@ -17,7 +17,6 @@ var blocks_pa = [
 	{ id: "wool_colored_brown.png", rgb: [114, 72, 41] },
 	{ id: "wool_colored_blue.png", rgb: [53, 57, 157] },
 	{ id: "wool_colored_black.png", rgb: [21, 21, 26] },
-	/* { id: "tnt_side.png", rgb: [166, 96, 77] }, disabled just for GitHub (lol) */
 	{ id: "stone_slab_top.png", rgb: [161, 161, 161] },
 	{ id: "stone_slab_side.png", rgb: [167, 167, 167] },
 	{ id: "stone_granite_smooth.png", rgb: [160, 115, 98] },
@@ -224,9 +223,5 @@ var blocks_pa = [
 
 
 
-
-/* bg changer easter egg */
-window.addEventListener('click', function (clickCnt) {
-    if (clickCnt.detail == 7) {$('header').css({'background': 'linear-gradient(' + Math.random()*360 + 'deg, rgba(' + Math.random()*360 + ',' + Math.random()*360 + ',' + Math.random()*360 + '), rgba(' + Math.random()*256 + ',' + Math.random()*256 + ',' + Math.random()*256 + '))'})}});
 
 console.log("*beep* blocks_pa.js values initialized");

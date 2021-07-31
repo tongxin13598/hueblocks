@@ -24,7 +24,6 @@ var blocks = [
 	{ id: "warped_nylium.png", rgb: [43, 115, 101] },
 	{ id: "tuff.png", rgb: [108, 110, 103] },
 	{ id: "tube_coral_block.png", rgb: [49, 88, 207] },
-	/* { id: "tnt_side.png", rgb: [180, 93, 90] }, disabled just for GitHub (lol) */
 	{ id: "terracotta.png", rgb: [152, 94, 68] },
 	{ id: "stripped_warped_stem_top.png", rgb: [46, 95, 81] },
 	{ id: "stripped_warped_stem.png", rgb: [58, 152, 149] },
