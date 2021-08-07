@@ -31,6 +31,10 @@ $('#colorBtn2').bind('contextmenu', function(cmenu) {
 	setTimeout(function () { updateColors(); }, 500);
 });
 
+
+
+
+
 /* random colours */
 function rndColors() {
 	const hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f']
@@ -54,14 +58,9 @@ $('#rndColorsBtn').on('click', function() { rndColors(); });
 
 
 
-/* compact HEX to RGB converter */
-function hexToRgb(h) {
-    r = parseInt((cutHex(h)).substring(0,2),16), 
-	g = parseInt((cutHex(h)).substring(2,4),16), 
-	b = parseInt((cutHex(h)).substring(4,6),16)
-    return [r, g, b];
-};
-function cutHex(h) {return (h.charAt(0)=='#') ? h.substring(1,7):h};
+/* compact HEX <--> RGB converter I found on stackoverflow */
+function hexToRgb(h){return['0x'+h[1]+h[2]|0,'0x'+h[3]+h[4]|0,'0x'+h[5]+h[6]|0]}
+function rgbToHex(r,g,b){return"#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);}
 
 
 
@@ -243,8 +242,8 @@ function blockVis() {
 	var stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 	stepVis.attr('src', './data/' + blocksType + '/' + stepLeaders[stepCount]);
 	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
-	stepVis.css('width', visSize + 'px');
-	stepVis.css('height', visSize + 'px');
+	stepVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
+
 	stepVis.appendTo('#visResult');
 }
 
@@ -257,24 +256,23 @@ var visSize = 64;
 
 $('#visDownscale').on('click', function() { if (visSize > 16) {
 	visSize /= 2;
-	$('.visImg').css('width', visSize + 'px');
-	$('.visImg').css('height', visSize + 'px');
+	$('.visImg').css({'width': visSize + 'px', 'height': visSize + 'px'});
 }});
 $('#visUpscale').on('click', function() { if (visSize < 256) {
 	visSize /= 0.5;
-	$('.visImg').css('width', visSize + 'px');
-	$('.visImg').css('height', visSize + 'px');
+	$('.visImg').css({'width': visSize + 'px', 'height': visSize + 'px'});
 }});
 
 /* update and show popup when block is hovered */
-function showPopup(e) {
-	$('#visPopup').html($(e).attr('blockname'));
-	$('#visPopup').css('left', e.x + 4).css('top', e.y + 4);
+function showPopup(block) {
+	$('#visPopup').html($(block).attr('blockname'));
+	$('#visPopup').css('left', block.x + 4).css('top', block.y + 4);
 	$('#visPopup').show();
 };
 
 /* hide popup when block is not hovered */
-function hidePopup(e) {
+function hidePopup(block) {
+	$('#visPopup').html('MissingNo');
 	$('#visPopup').hide();
 };
 
@@ -328,12 +326,12 @@ function presetImport () {
 		presetImporter += 1;
 	}
 	
-	/* when all the presets imported, add 'Custom blocks...' option
+	/* when all the presets imported, add 'Custom preset...' option */
 	$('#blocksPresetDD').append(
 		$(document.createElement('option')).prop({
 			value: 'custom',
-			text: 'Custom blocks...'
-		})); */
+			text: '[NEW] Custom preset...'
+		}));
 };
 
 presetImport();
@@ -353,22 +351,104 @@ $('#blocksPresetDD').change(function () {
 
 
 
-/* custom blocks screen */
+/* custom preset blocks selection screen */
 $('#blocksPresetDD').change(function () {
 	if ($('#blocksPresetDD').val() == 'custom') {
-		console.log('[p] custom preset screen selected, waiting for preset...');
+		if (blocksType == 'blocks_pa') {$('#blocksPresetDD').val('blocks_pa')} else {$('#blocksPresetDD').val('blocks')};
+		blockData = eval( $('#blocksPresetDD').val() );
+		console.log('[p] custom preset selected, temporarily changed to "' + $('#blocksPresetDD').val() + '"');
 		
-		$('#blocksSelScreen').fadeIn(300);
-	}
-});
+		$('#CPSelScreen').fadeIn(300);
+		var BPickBlocksVis = 0;
+		$('#CPSelScreenVis').html('');
 
-/* custom blocks screen cancel button */
-$('#blocksSelScreenClose').on('click', function() {
-	$('#blocksPresetDD').val('blocks');
-	console.log('[p] custom preset screen cancelled, reverted to "' + $('#blocksPresetDD').val() + '"');
+		/* visualise all the blocks available  */
+		CPSelBlocksVis = blockData.length -1;
+		var CPselVisLetter = 'ибражы';
+		while(CPSelBlocksVis >= 0) {
+			if (CPselVisLetter != blockData[CPSelBlocksVis].id[0]) {
+				if (CPSelBlocksVis != blockData.length -1) {
+					CPSelVis = $('</div>');
+					CPSelVis.appendTo('#CPSelScreenVis');
+				};
+				CPselVisLetter = blockData[CPSelBlocksVis].id[0];
+				var CPSelVis = $('<div class="CPSelVisLetterSeparator" id="CPSelVisLetter' + blockData[CPSelBlocksVis].id[0] + '">');
+				CPSelVis.appendTo('#CPSelScreenVis');
+			};
+			var CPSelVis = $('<input type="checkbox" name="' + blockData[CPSelBlocksVis].id + 'Checkbox" class="CPSelVis"]>');
+			
+			/* jQuery doesn't work properly with IDs that contains ".", lmao*/
+			CPSelVis.attr('id', blockData[CPSelBlocksVis].id.replace('.', '・'));
+			
+			CPSelVis.appendTo('#CPSelVisLetter' + blockData[CPSelBlocksVis].id[0]);
+
+			var CPSelVis = $('<label for="' + blockData[CPSelBlocksVis].id.replace('.', '・') + '" class="CPSelVisBtn"></label>');
+			CPSelVis.appendTo('#CPSelVisLetter' + blockData[CPSelBlocksVis].id[0]);
+			
+			var CPSelVis2 = $('<img class="CPSelVisImg" id="' + blockData[CPSelBlocksVis].id.replace('.', '・') + 'Img" onclick="CPBlockUpdater(' + "this.getAttribute('blockid'), this.getAttribute('blockrgb')" + ');" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">')
+
+			CPSelVis2.attr('src', './data/' + blocksType + '/' + blockData[CPSelBlocksVis].id);
+			CPSelVis2.attr('blockname', blockData[CPSelBlocksVis].id.replace('.png', '').replace(/\_/g, ' '));
+			CPSelVis2.attr('blockid', blockData[CPSelBlocksVis].id);
+			CPSelVis2.attr('blockrgb', blockData[CPSelBlocksVis].rgb[0] + '|' + blockData[CPSelBlocksVis].rgb[1] + '|' + blockData[CPSelBlocksVis].rgb[2]);
+			CPSelVis2.css({'width': visSize + 'px', 'height': visSize + 'px'});
+
+			CPSelVis2.appendTo(CPSelVis);
+			CPSelBlocksVis -= 1;
+}}});
+
+/* check if at least one block is selected (used for confirm button activation/deactivation) */
+function CPBlockUpdater(blockid, blockrgb) {
+	setTimeout(function () {
+		if ($('.CPSelVis:checked').length <= 0) { $('#CPSelScreenConfirm').prop('disabled', true); } else { $('#CPSelScreenConfirm').prop('disabled', false)};
+	}, 20);
+};
+
+var custom = [];
+/* custom blocks screen confirm button */
+$('#CPSelScreenConfirm').on('click', function() {
+	$('#CPSelScreen').fadeOut(300);
+
+	/* add current block to the preset if checked 
+	setTimeout(function () {
+		if ($('#' + blockid.replace('.', '・')).is(':checked')) { console.log('БЛ~~~ ~ой мама пришла')};
+		console.log('[p] added "' + blockid + '" with rgb "' + blockrgb);
+	}, 20); */
+	
+	/* wipe previous custom preset */
+	custom = [];
+	
+	/* get array of all the selected blocks */
+	var CPSelectedBlocks = $('.CPSelVis:checked');
+	
+	var CPSelectedBlocksPart = [];
+	var currentCPSelectedBlock = 0;
+	while(currentCPSelectedBlock <= CPSelectedBlocks.length -1) {
+		/* convert blockrgb and blockid to preset array format */
+		CPSelectedBlocksPart = { 
+			id: $('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockid'),
+			rgb: [
+			parseInt($('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockrgb').split('|')[0]),
+			parseInt($('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockrgb').split('|')[1]),
+			parseInt($('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockrgb').split('|')[2]),
+		]};
+
+		/* push generated array to the custom preset */
+		custom.push(CPSelectedBlocksPart);
+		currentCPSelectedBlock += 1;
+		};
+	$('#blocksPresetDD').val('custom');
 	blockData = eval( $('#blocksPresetDD').val() );
 
-	$('#blocksSelScreen').fadeOut(300);
+	console.log('[p] custom preset generated successfully! changed to "' + $('#blocksPresetDD').val() + '"');
+	console.log('[p]', custom);
+});
+
+
+/* custom blocks screen cancel button */
+$('#CPSelScreenClose').on('click', function() {
+	console.log('[p] custom preset cancelled.');
+	$('#CPSelScreen').fadeOut(300);
 });
 
 
@@ -385,6 +465,67 @@ function blocksTypeSwitch () {
 };
 
 $('#blocksTypeSwitcher').on('click', function() { blocksTypeSwitch(); });
+
+
+
+
+
+/* BPick screen */
+var BPickCSV = 'color1';
+
+function colorBPick(color) {
+	var BPickBlocksVis = 0;
+	$('#BPickScreen').fadeIn(300);
+	$('#BPickScreenVis').html('');
+
+	/* store selected colour (color1 or color2) value */
+	BPickSCV = color;
+
+	/* visualise all the blocks available  */
+	BPickBlocksVis = blockData.length -1;
+	var BPickVisLetter = 'ибражы';
+	while(BPickBlocksVis >= 0) {
+		if (BPickVisLetter != blockData[BPickBlocksVis].id[0]) {
+			if (BPickBlocksVis != blockData.length -1) {
+				BPickVis = $('</div>');
+				BPickVis.appendTo('#BPickScreenVis');
+			};
+			BPickVisLetter = blockData[BPickBlocksVis].id[0];
+			var BPickVis = $('<div class="BPickVisLetterSeparator" id="BPickVisLetter' + blockData[BPickBlocksVis].id[0] + '">');
+			BPickVis.appendTo('#BPickScreenVis');
+		};
+		var BPickVis = $('<img class="BPickVisImg" onclick="' + "BPickSelect(this.getAttribute('blockid'));" + '" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
+
+		/* add essential attributes */
+		BPickVis.attr('src', './data/' + blocksType + '/' + blockData[BPickBlocksVis].id);
+		BPickVis.attr('blockname', blockData[BPickBlocksVis].id.replace('.png', '').replace(/\_/g, ' '));
+		BPickVis.attr('blockid', blockData[BPickBlocksVis].id);
+
+		/* add size controls */
+		BPickVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
+
+		BPickVis.appendTo('#BPickVisLetter' + blockData[BPickBlocksVis].id[0]);
+		BPickBlocksVis -= 1;
+}};
+
+$('#colorBPick1').on('click', function() { colorBPick('color1'); });
+$('#colorBPick2').on('click', function() { colorBPick('color2'); });
+
+/* bpick screen block selection */
+function BPickSelect(blockid) {
+	var BPickSelectedBlockResult = blockData.filter(function(bdblock) { return bdblock.id == blockid });
+
+	if (BPickSCV == 'color1') {	$('#colorSel1').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]))};
+	if (BPickSCV == 'color2') {	$('#colorSel2').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]))};
+	
+	updateColors();
+	$('#BPickScreen').fadeOut(300);
+};
+
+/* bpick screen cancel button */
+$('#BPickScreenClose').on('click', function() {
+	$('#BPickScreen').fadeOut(300);
+});
 
 
 

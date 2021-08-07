@@ -11,7 +11,7 @@
 	<h2>Create beautiful block gradients in a few clicks!</h2>
 		<div class="colorPicker">
 			<div id="colorPreview" style="background: #4b5a70;">
-				<div id="colorBtn1"><input type="color" id="colorSel1" v="#ff8714"></div><p id="colorPreviewText">Oh no! Something is wrong with JavaScript :(</p><div id="colorBtn2"><input type="color" id="colorSel2" v="#842571"></div>
+				<div id="colorBtn1"><input type="color" id="colorSel1" v="#ff8714"><button id="colorBPick1"><img src="./icon/bpick.svg" title="Pick starting colour from block"></img></button></div><p id="colorPreviewText">Oh no! Something is wrong with JavaScript :(</p><div id="colorBtn2"><input type="color" id="colorSel2" v="#842571"><button id="colorBPick2"><img src="./icon/bpick.svg" title="Pick final colour from block"></img></button></div>
 				<button id="rndColorsBtn"><img src="./icon/random.svg" title="Random colours"></img></button>
 		</div><br><em>left click on the left/right side of the bar to change its color; right click to copy hex</em></div>
 		<div class="topConfigs">
@@ -20,7 +20,7 @@
 				</label><input type="radio" name="cLenght" id="cLenght2"><label for="cLenght2" id="cLenghtBtn2">25 blocks
 				</label><input type="radio" name="cLenght" id="cLenght3"><label for="cLenght3" id="cLenghtBtn3">Custom...</label></div>
 			<div class="options">
-				<input type="checkbox" name="optNodub" id="optNodub"><label for="optNodub" id="optNodubBtn">Hide duplicates</label><br>
+				<input type="checkbox" name="optNodub" id="optNodub" checked="checked"><label for="optNodub" id="optNodubBtn">Hide duplicates</label><br>
 				<input type="checkbox" name="optRKeep" id="optRKeep"><label for="optRKeep" id="optRKeepBtn">Keep previous results</label>
 				<p class="credits">by <a href="https://github.com/1280px/">1280px</a>, 2021 | <a href="https://github.com/1280px/hueblocks/">source code</a></p>
 
@@ -33,7 +33,14 @@
 		Preset: <select id="blocksPresetDD"><option value="blocks" selected="selected">Loading presets...</option></select><img src="./icon/dd-arrow.svg" title="Downscale (0.5x)"></img>　|　<label for="blocksTypeSwitcher">Jappa-nese </label><input type="checkbox" id="blocksTypeSwitcher"></input><label for="blocksTypeSwitcher" id="blocksTypeSwitcherBtn"><!-- tip: tumblers are essentially just a little fancier checkboxes --></label><label for="blocksTypeSwitcher"> Programmer's Art</label>
 	</div>
 
-	<div id="blocksSelScreen" style="display: none;">картошка дамашняя<button id="blocksSelScreenClose"><img src="./icon/zoom-in.svg" title="Cancel"></img></button></div>
+	<div id="CPSelScreen" style="display: none;"><h2 class="screenTip">ー Select 1 or more blocks and press <img src="./icon/confirm.svg" title="Confirm"></img> ー</h2>
+	<button id="CPSelScreenClose"><img src="./icon/zoom-in.svg" title="Cancel"></img></button>
+	<button id="CPSelScreenConfirm" disabled="true"><img src="./icon/confirm.svg" title="Confirm (select at least 1 block)"></img></button>
+	<div id="CPSelScreenVis"></div></div>
+
+	<div id="BPickScreen" style="display: none;"><h2 class="screenTip">ー Select a block ー</h2>
+	<button id="BPickScreenClose"><img src="./icon/zoom-in.svg" title="Cancel"></img></button>
+	<div id="BPickScreenVis"></div></div>
 
 	<div id="visResult"></div>
 	<div id="visPopup">missingNo</div>	

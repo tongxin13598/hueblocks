@@ -79,7 +79,7 @@ a:hover:active {
 	box-shadow: 0 0 0 2px #fffc;
 }
 
-#rndColorsBtn {
+#rndColorsBtn, #colorBPick1, #colorBPick2 {
 	appearance: none;
 	position: absolute;
 	width: 32px;	height: 32px;
@@ -88,13 +88,28 @@ a:hover:active {
 	border: 2px solid #fff0;	border-radius: 4px;
 	transition: 200ms;
 }
-#rndColorsBtn:hover {
+#rndColorsBtn:hover, #colorBPick1:hover, #colorBPick2:hover {
+	opacity: 1 !important;
 	background: #fff3;
 	border: 2px solid #fff0;
 }
-#rndColorsBtn:hover:active {
+#rndColorsBtn:hover:active, #colorBPick1:hover:active, #colorBPick2:hover:active {
 	background: #fff6;
 	border: 2px solid #fff3;
+}
+#colorBPick1 {
+	opacity: 0;
+	margin: -40px 0 0 -156px;
+}
+#colorBPick2 {
+	opacity: 0;
+	margin: -40px 0 0 124px;
+}
+#colorBtn1:hover #colorBPick1, #colorBtn2:hover #colorBPick2 {
+	opacity: 0.5;
+}
+#colorBPick1 img, #colorBPick2 img {
+	margin: -10px;
 }
 
 .topConfigs {
@@ -250,8 +265,8 @@ a:hover:active {
 }
 .visImg {
 	width: 64px;	height: 64px;
-	image-rendering: pixelated;       /* for Chromium-based browsers */
-	image-rendering: crisp-edges;     /* for Firefox-based browsers */
+	image-rendering: pixelated;			/* for Chromium-based browsers */
+	image-rendering: crisp-edges;		/* for Firefox-based browsers */
 	margin-bottom: -4px;
 }
 #visPopup {
@@ -267,36 +282,92 @@ a:hover:active {
 	text-transform: capitalize;
 }
 
-#blocksSelScreen {
+#CPSelScreen, #BPickScreen {
 	position: absolute;
 	width: 100%;	height: 100%;
 	background-color: #3336;
 	top: 0%;
-	overflow: hidden;
+	overflow-x: hidden;
 	backdrop-filter: blur(3px);
 }
-#blocksSelScreenClose {
-	position: absolute;
-	top: 20px; right: 20px;
-	margin: 2px;
-	border-radius: 1280px;
-	width: 40px;	height: 40px;
-	background-color: transparent;
-	border: 2px solid #666;
-	box-shadow: inset 0 0 0 -4px #15194288 !important;
+#CPSelScreenVis, #BPickScreenVis {
+	margin: 80px;
+	text-align: center;
+	overflow: hidden;
+}
+.CPSelVisLetterSeparator, .BPickVisLetterSeparator {
+    width: 100%;
+    text-align: left;
+    margin: 4px 4px 20px;
+}
+.CPSelVisImg, .BPickVisImg {
+	width: 64px;	height: 64px;
+	image-rendering: pixelated;			/* for Chromium-based browsers */
+	image-rendering: crisp-edges;		/* for Firefox-based browsers */
+	margin-bottom: -4px;
+	z-index: 40;
 	transition: 200ms;
 }
-#blocksSelScreenClose img {
+.CPSelVisImg:hover, .BPickVisImg:hover {
+    position: relative;
+    box-shadow: 0 0 0 4px #a1a3b3cc, 0 0 8px 4px #0002;
+}
+.CPSelVisImg:hover:active, .BPickVisImg:hover:active {
+	box-shadow: 0 0 0 2px #fffc, 0 0 4px 4px #0002;
+	background-color: #fff4;
+}
+
+#CPSelScreenClose, #CPSelScreenConfirm, #BPickScreenClose {
+	position: fixed;
+	top: 20px; right: 20px;
+	margin: 2px;
+	width: 40px;	height: 40px;
+	background-color: transparent;
+	border: 2px solid #666;	border-radius: 1280px;
+	box-shadow: inset 0 0 0 -4px #15194288 !important;
+	transition: 200ms;
+	user-select: none;
+}
+#CPSelScreenConfirm {
+	top: 68px;
+}
+#CPSelScreenClose img, #BPickScreenClose img {
 	margin-top: 2px;
 	transform: rotate(45deg);
 }
-#blocksSelScreenClose:hover {
+#CPSelScreenConfirm img {
+	margin-top: 2px;
+}
+#CPSelScreenClose:hover, #CPSelScreenConfirm:hover, #BPickScreenClose:hover {
 	border: 2px solid #a1a3b3;
 }
-#blocksSelScreenClose:hover:active {
+#CPSelScreenClose:hover:active, #CPSelScreenConfirm:hover:active, #BPickScreenClose:hover:active {
 	border: 4px solid #a1a3b366;
 	background-color: #3339;
 	transition: 50ms;
+}
+#CPSelScreenClose:disabled, #CPSelScreenConfirm:disabled, #BPickScreenClose:disabled {
+	border: 0px solid #66666666 !important;
+	background-color: #66666666 !important;
+	transition: 200ms !important;
+}
+#CPSelScreenClose:disabled img, #CPSelScreenConfirm:disabled img, #BPickScreenClose:disabled img {
+	opacity: 0.5 !important;
+}
+
+.CPSelVis {
+	display: none;
+	transition: 200ms;
+}
+.CPSelVis:checked+label img {
+    transform: scale(0.8);
+}
+.screenTip {
+    margin-top: 25px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
 }
 
 .bottomConfigs {
@@ -415,9 +486,8 @@ input:checked + #blocksTypeSwitcherBtn::before {
 #blocksTypeSwitcherBtn::after {
 	position: absolute;
 	content: '';
-	left: -4px;
-	top: -10px;
-	width: 56px;
-	height: 22px;
+	left: -2px;	top: -10px;
+	width: 52px;	height: 22px;
 	background-color: #fff0;
+
 }
