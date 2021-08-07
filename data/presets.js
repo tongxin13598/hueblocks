@@ -39,7 +39,6 @@ var colorful = [
 	{ id: "red_shulker_box.png", rgb: [143, 32, 31] },
 	{ id: "red_concrete_powder.png", rgb: [168, 54, 51] },
 	{ id: "red_concrete.png", rgb: [142, 33, 33] },
-	{ id: "redstone_block.png", rgb: [115, 12, 0] },
 	{ id: "purple_wool.png", rgb: [122, 42, 173] },
 	{ id: "purple_terracotta.png", rgb: [118, 70, 86] },
 	{ id: "purple_shulker_box.png", rgb: [105, 33, 158] },
@@ -251,10 +250,6 @@ var nether = [
 	{ id: "basalt_side.png", rgb: [74, 73, 79] },
 	{ id: "ancient_debris_side.png", rgb: [96, 64, 56] }
 ];
-
-/* bg changer easter egg -- yeah you found it :D */
-window.addEventListener('click', function (clickCnt) {
-    if (clickCnt.detail == 7) {$('header').css({'background': 'linear-gradient(' + Math.random()*360 + 'deg, rgba(' + Math.random()*360 + ',' + Math.random()*360 + ',' + Math.random()*360 + '), rgba(' + Math.random()*256 + ',' + Math.random()*256 + ',' + Math.random()*256 + '))'})}});
 
 var overworld = [
 	{ id: "yellow_terracotta.png", rgb: [186, 133, 35] },

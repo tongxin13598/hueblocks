@@ -165,7 +165,6 @@ var blocks_pa = [
 	{ id: "furnace_side.png", rgb: [119, 119, 119] },
 	{ id: "end_stone.png", rgb: [221, 224, 165] },
 	{ id: "end_bricks.png", rgb: [226, 231, 171] },
-	{ id: "enchanting_table_bottom.png", rgb: [19, 17, 28] },
 	{ id: "emerald_ore.png", rgb: [108, 129, 116] },
 	{ id: "emerald_block.png", rgb: [81, 218, 117] },
 	{ id: "dirt_podzol_top.png", rgb: [90, 63, 29] },
