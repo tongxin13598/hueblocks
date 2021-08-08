@@ -9,12 +9,12 @@ Additionally you can:<ul>
 <li>pick starting/final colour from the block you want to start/end with
 <li>select a blocks preset (or even create your own!) if you want to generate a gradient using only specific blocks
 <li>switch between new (Jappa-nese) and old (Programmer's Art) textures if you're playing on legacy Minecraft versions
-<li>etc.</ul>
+<li><i>etc.</i></ul>
 
 HueBlocks uses MCJE 1.17.1 (Jappa-nese) and MCJE 1.12.2 (Programmer's Art) block textures. 
 <br>Please note that <i>not every single</i> texture included — transparent, some non-solid and generally messy-textured blocks (like TNT block) were scrapped for the sake of better gradient generation quality.
 
-If you want to modify the blocksets or use your own presets, you can use blox2rgb.py — a simple Python script for autogeneration blockdata files. Check "blox2rgb" folder for more info
+If you want to modify the blocksets or use your own presets, you can use blox2rgb.py — a simple Python script for autogeneration blockdata files. <i>Check <a href="https://github.com/1280px/hueblocks/tree/main/data/!!%20blox2rgb">"blox2rgb" folder</a> for more info</i>
 
 
 <br><h1>Legal Notice</h1>
