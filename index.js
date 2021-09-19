@@ -37,7 +37,7 @@ $('#colorBtn2').bind('contextmenu', function(cmenu) {
 
 /* random colours */
 function rndColors() {
-	const hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f']
+	const hexNums = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
 
 	var rndColorValues = ['',''];
 	
@@ -53,6 +53,22 @@ function rndColors() {
 };
 
 $('#rndColorsBtn').on('click', function() { rndColors(); });
+
+
+
+
+
+/* swap colours */
+function swapColors() {
+	var swapColorsTemp = [color1,color2];
+
+	$('#colorSel1').val(swapColorsTemp[1]);
+	$('#colorSel2').val(swapColorsTemp[0]);
+
+	updateColors();
+};
+
+$('#swapColorsBtn').on('click', function() { swapColors(); });
 
 
 
@@ -111,7 +127,7 @@ $('#cLenght3').on('click', function() {
 
 	/* process invalid numeral input values */
 	if (stepLen < 3) {
-		alert('Number is too small; please enter at least 3 or bigger.');
+		alert('The entered number is too small; please enter at least 3 or bigger.');
 		stepLen = 3;
 	};
 	if (stepLen > 999) {
@@ -305,7 +321,7 @@ function presetImport () {
 		$('#blocksPresetDD').append(
 			$(document.createElement('option')).prop({
 				value: 'blocks_pa',
-				text: 'Default (1.12.2 blocks)'
+				text: 'Default (1.12.2 blocks +1)'
 		}));
 	$('#blocksPresetDD').val('blocks_pa');
 	blockData = eval( $('#blocksPresetDD').val() );

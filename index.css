@@ -47,7 +47,7 @@ a:hover:active {
 #colorPreviewText {
 	position: absolute;
 	width: 640px;	height: 40px;
-	margin-top: -42px;	line-height: 40px;
+	margin-top: -40px;	line-height: 40px;
 	color: #fff;
 	text-shadow: 0 0 2px #0008, 0 0 12px #0004;
 	font-size: 14px;	text-transform: uppercase;
@@ -79,7 +79,7 @@ a:hover:active {
 	box-shadow: 0 0 0 2px #fffc;
 }
 
-#rndColorsBtn, #colorBPick1, #colorBPick2 {
+#rndColorsBtn, #swapColorsBtn, #colorBPick1, #colorBPick2 {
 	appearance: none;
 	position: absolute;
 	width: 32px;	height: 32px;
@@ -88,28 +88,34 @@ a:hover:active {
 	border: 2px solid #fff0;	border-radius: 4px;
 	transition: 200ms;
 }
-#rndColorsBtn:hover, #colorBPick1:hover, #colorBPick2:hover {
+#rndColorsBtn:hover, #swapColorsBtn:hover, #colorBPick1:hover, #colorBPick2:hover {
 	opacity: 1 !important;
 	background: #fff3;
 	border: 2px solid #fff0;
 }
-#rndColorsBtn:hover:active, #colorBPick1:hover:active, #colorBPick2:hover:active {
+#rndColorsBtn:hover:active, #swapColorsBtn:hover:active, #colorBPick1:hover:active, #colorBPick2:hover:active {
 	background: #fff6;
 	border: 2px solid #fff3;
 }
 #colorBPick1 {
-	opacity: 0;
-	margin: -40px 0 0 -156px;
+	opacity: 0.3;
+	margin: 4px 4px 4px -316px;
 }
 #colorBPick2 {
-	opacity: 0;
-	margin: -40px 0 0 124px;
+	opacity: 0.3;
+	margin: 4px 4px 4px -36px;
 }
 #colorBtn1:hover #colorBPick1, #colorBtn2:hover #colorBPick2 {
-	opacity: 0.5;
+	opacity: 0.6;
 }
 #colorBPick1 img, #colorBPick2 img {
 	margin: -10px;
+}
+#swapColorsBtn {
+	margin-left: -36px;
+}
+#swapColorsBtn img {
+	transform: rotate(90deg);
 }
 
 .topConfigs {
