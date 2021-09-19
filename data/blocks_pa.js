@@ -1,4 +1,4 @@
-/* generated at 2021-07-27 20:00:45.978046 */
+/* generated at 2021-09-13 11:09:10.826672 */
 
 var blocks_pa = [
 	{ id: "wool_colored_yellow.png", rgb: [249, 198, 40] },
@@ -172,6 +172,7 @@ var blocks_pa = [
 	{ id: "dirt.png", rgb: [134, 96, 67] },
 	{ id: "diamond_ore.png", rgb: [130, 142, 146] },
 	{ id: "diamond_block.png", rgb: [106, 222, 216] },
+	{ id: "crying_obsidian.png", rgb: [25, 30, 73] },
 	{ id: "crafting_table_top.png", rgb: [112, 74, 44] },
 	{ id: "crafting_table_side.png", rgb: [120, 97, 61] },
 	{ id: "concrete_yellow.png", rgb: [241, 175, 21] },
