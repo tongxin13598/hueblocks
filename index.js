@@ -256,7 +256,9 @@ function genBlocks() {
 /* block visualisation */
 function blockVis() {
 	var stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
-	stepVis.attr('src', './data/' + blocksType + '/' + stepLeaders[stepCount]);
+	const id = stepLeaders[stepCount];
+	const item = blockData.find(i => i.id === id.replace(".png"));
+	stepVis.attr('src', item?.imageData ? item.imageData : './data/' + blocksType + '/' + stepLeaders[stepCount]);
 	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
 	stepVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
 
@@ -345,31 +347,160 @@ function presetImport () {
 	/* when all the presets imported, add 'Custom preset...' option */
 	$('#blocksPresetDD').append(
 		$(document.createElement('option')).prop({
-			value: 'custom',
-			text: '[NEW] Custom preset...'
+			value: 'customPreset',
+			text: 'Custom preset'
+		}));
+
+	/* add new option for custom blocksets */
+	$('#blocksPresetDD').append(
+		$(document.createElement('option')).prop({
+			value: 'customBlockset',
+			text: '[NEW] Custom blockset'
 		}));
 };
 
 presetImport();
 
 
-
-
-
 /* preset selector */
 $('#blocksPresetDD').change(function () {
-	if ($('#blocksPresetDD').val() != 'custom') {
+	if (!$('#blocksPresetDD').val().includes("custom")) {
 		console.log('[p] changed preset to "' + $('#blocksPresetDD').val() + '"');
 		blockData = eval( $('#blocksPresetDD').val() );
 }});
 
 
+/* Custom Blockset */
+
+// Create Temporary Canvas
+const tempCanvas = document.createElement("canvas");
+
+// Set Width/Height To 1px & Hide
+tempCanvas.width = 1;
+tempCanvas.height = 1;
+tempCanvas.style.visibility = "hidden";
+tempCanvas.style.position = "fixed";
+tempCanvas.style.top = "0";
+tempCanvas.style.left = "0";
+
+// Get Temporary Context
+const tempContext = tempCanvas.getContext('2d');
+console.log("[p]", "Temporary context created");
+
+function readFile(file) {
+	return new Promise((r,j) => {
+		const reader = new FileReader();
+		reader.onload = function(e) { r(e) };
+		reader.onerror = function(e) { j(e) };
+		reader.readAsDataURL(file);
+	});
+}
+
+let customBlockset = [];
+async function onDirectoryChange(d) {
+	/**
+	 * @type {File[]}
+	 */
+	const files = Array.from(d.files).filter(i => /(image\/png|image\/jpeg)/.test(i.type) && !i.type.includes("gif"));
+
+	if (!files.length) {
+		// Failed
+		return;
+	} else {
+		async function wait(ms) {
+			return new Promise((r) => setTimeout(() => r(), ms));
+		}
+
+		for (const file of files) {
+			try {
+				// Await Read File
+				const f = await readFile(file);
+
+				// Use base64 Data To Create New Image
+				const image = new Image();
+				image.src = f.target.result;
+
+				// Once Image Is Loaded Continue
+				image.onload = function () {
+					// Draw Image To Temporary Context
+					tempContext.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height);
+
+					// await wait(2);
+
+					// Get RGBA Of Image
+					const rgba = tempContext.getImageData(0, 0, 1, 1).data;
+
+					// Append Image Custom Blocks View
+					const img = $(`<img class="CBSelVisImg" src="${f.target.result}" alt="${file.name}"/>`);
+					img.appendTo("#CBCustomBlocks");
+
+					// Get Name Remove Extension
+					let name = file.name.split(".");
+					name.pop();
+					name = name.join(".");
+
+					// Get RGB From RGBA
+					const rgb = [rgba[0], rgba[1], rgba[2]];
+
+					// Push Texture To customBlockset Array
+					customBlockset.push({id: name, rgb, imageData: f.target.result});
+
+					console.log("[p]", "Successfully read file", file.name);
+				}
+			} catch (err) {
+				console.log("[p]", "Failed to read file", file.name, err);
+			}
+		}
+
+		if (customBlockset.length > 0) {
+			// Allow Confirm
+			CBConfirmUpdater(false);
+		}
+	}
+}
+
+$('#blocksPresetDD').change(function () {
+	if ($('#blocksPresetDD').val() == 'customBlockset') {
+		$('#CBSelScreen').fadeIn(300);
+		var BPickBlocksVis = 0;
+		$('#CBSelScreenVis').html('');
+
+		blockData = [];
+		customBlockset = [];
+		CBConfirmUpdater(true);
+
+		const CBInput = $('<div><input type="file" id="CBSelScreenDirectorySelector" onchange="onDirectoryChange(this)" accept="image/png, image/jpeg" multiple/></div>');
+		CBInput.appendTo('#CBSelScreenVis');
+		const CBBlock = $('<div id="CBCustomBlocks"></div>');
+		CBBlock.appendTo('#CBSelScreenVis');
+
+	}
+})
+$('#CBSelScreenConfirm').on('click', function() {
+	$('#CBSelScreen').fadeOut(300);
+	CBConfirmUpdater(true);
+	blockData = customBlockset;
+})
+$('#CBSelScreenClose').on('click', function() {
+	if (blocksType == 'blocks_pa') {$('#blocksPresetDD').val('blocks_pa')} else {$('#blocksPresetDD').val('blocks')};
+	blockData = eval( $('#blocksPresetDD').val() );
+	console.log(`[p] custom blockset cancelled. Changing type back to "${blocksType}"`);
+	CBConfirmUpdater(true);
+	$('#CBSelScreen').fadeOut(300);
+	customBlockset = [];
+});
+function removeFileUpload() {
+	$('#CBSelScreenDirectorySelector').remove();
+}
+function CBConfirmUpdater(i) {
+	$('#CBSelScreenConfirm').prop('disabled', i);
+};
 
 
 
 /* custom preset blocks selection screen */
 $('#blocksPresetDD').change(function () {
-	if ($('#blocksPresetDD').val() == 'custom') {
+	if ($('#blocksPresetDD').val() == 'customPreset') {
 		if (blocksType == 'blocks_pa') {$('#blocksPresetDD').val('blocks_pa')} else {$('#blocksPresetDD').val('blocks')};
 		blockData = eval( $('#blocksPresetDD').val() );
 		console.log('[p] custom preset selected, temporarily changed to "' + $('#blocksPresetDD').val() + '"');
@@ -453,8 +584,8 @@ $('#CPSelScreenConfirm').on('click', function() {
 		custom.push(CPSelectedBlocksPart);
 		currentCPSelectedBlock += 1;
 		};
-	$('#blocksPresetDD').val('custom');
-	blockData = eval( $('#blocksPresetDD').val() );
+	$('#blocksPresetDD').val('customPreset');
+	blockData = custom;
 
 	console.log('[p] custom preset generated successfully! changed to "' + $('#blocksPresetDD').val() + '"');
 	console.log('[p]', custom);
@@ -513,7 +644,7 @@ function colorBPick(color) {
 		var BPickVis = $('<img class="BPickVisImg" onclick="' + "BPickSelect(this.getAttribute('blockid'));" + '" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 
 		/* add essential attributes */
-		BPickVis.attr('src', './data/' + blocksType + '/' + blockData[BPickBlocksVis].id);
+		BPickVis.attr('src', blockData[BPickBlocksVis].imageData ? blockData[BPickBlocksVis].imageData : './data/' + blocksType + '/' + blockData[BPickBlocksVis].id);
 		BPickVis.attr('blockname', blockData[BPickBlocksVis].id.replace('.png', '').replace(/\_/g, ' '));
 		BPickVis.attr('blockid', blockData[BPickBlocksVis].id);
 
