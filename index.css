@@ -288,15 +288,21 @@ a:hover:active {
 	text-transform: capitalize;
 }
 
-#CPSelScreen, #BPickScreen {
+#CPSelScreen, #BPickScreen, #CBSelScreen {
 	position: absolute;
 	width: 100%;	height: 100%;
-	background-color: #3336;
 	top: 0%;
 	overflow-x: hidden;
-	backdrop-filter: blur(3px);
+	background-color: rgba(0, 0, 0, 0.9);
 }
-#CPSelScreenVis, #BPickScreenVis {
+/* If Supports backdrop-filter reduce bg alpha and use blur */
+@supports (backdrop-filter: none) {
+	#CPSelScreen, #BPickScreen, #CBSelScreen {
+		backdrop-filter: blur(3px);
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+}
+#CPSelScreenVis, #BPickScreenVis, #CBSelScreenVis {
 	margin: 80px;
 	text-align: center;
 	overflow: hidden;
@@ -306,7 +312,7 @@ a:hover:active {
     text-align: left;
     margin: 4px 4px 20px;
 }
-.CPSelVisImg, .BPickVisImg {
+.CPSelVisImg, .BPickVisImg, .CBSelVisImg {
 	width: 64px;	height: 64px;
 	image-rendering: pixelated;			/* for Chromium-based browsers */
 	image-rendering: crisp-edges;		/* for Firefox-based browsers */
@@ -323,7 +329,11 @@ a:hover:active {
 	background-color: #fff4;
 }
 
-#CPSelScreenClose, #CPSelScreenConfirm, #BPickScreenClose {
+#CBSelScreenDirectorySelector {
+	margin-bottom: 1rem;
+}
+
+#CPSelScreenClose, #CPSelScreenConfirm, #BPickScreenClose, #CBSelScreenClose, #CBSelScreenConfirm {
 	position: fixed;
 	top: 20px; right: 20px;
 	margin: 2px;
@@ -334,30 +344,32 @@ a:hover:active {
 	transition: 200ms;
 	user-select: none;
 }
-#CPSelScreenConfirm {
+#CPSelScreenConfirm, #CBSelScreenConfirm {
 	top: 68px;
 }
-#CPSelScreenClose img, #BPickScreenClose img {
+#CPSelScreenClose img, #BPickScreenClose img, #CBSelScreenClose img {
 	margin-top: 2px;
 	transform: rotate(45deg);
 }
-#CPSelScreenConfirm img {
+#CPSelScreenConfirm img, #CBSelScreenConfirm img {
 	margin-top: 2px;
 }
-#CPSelScreenClose:hover, #CPSelScreenConfirm:hover, #BPickScreenClose:hover {
+#CPSelScreenClose:hover, #CPSelScreenConfirm:hover, #BPickScreenClose:hover, #CBSelScreenClose:hover, #CBSelScreenConfirm:hover {
 	border: 2px solid #a1a3b3;
+	cursor: pointer;
 }
-#CPSelScreenClose:hover:active, #CPSelScreenConfirm:hover:active, #BPickScreenClose:hover:active {
+#CPSelScreenClose:hover:active, #CPSelScreenConfirm:hover:active, #BPickScreenClose:hover:active, #CBSelScreenClose:hover:active, #CBSelScreenConfirm:hover:active {
 	border: 4px solid #a1a3b366;
 	background-color: #3339;
 	transition: 50ms;
 }
-#CPSelScreenClose:disabled, #CPSelScreenConfirm:disabled, #BPickScreenClose:disabled {
+#CPSelScreenClose:disabled, #CPSelScreenConfirm:disabled, #BPickScreenClose:disabled, #CBSelScreenClose:disabled, #CBSelScreenConfirm:disabled {
 	border: 0px solid #66666666 !important;
 	background-color: #66666666 !important;
 	transition: 200ms !important;
+	cursor: not-allowed;
 }
-#CPSelScreenClose:disabled img, #CPSelScreenConfirm:disabled img, #BPickScreenClose:disabled img {
+#CPSelScreenClose:disabled img, #CPSelScreenConfirm:disabled img, #BPickScreenClose:disabled img, #CBSelScreenClose:disabled img, #CBSelScreenConfirm:disabled img {
 	opacity: 0.5 !important;
 }
 
