@@ -127,7 +127,8 @@ small {
 .topConfigs {
 	display: flex;
 	max-width: 720px;
-	margin: auto; padding: 10px 0;
+	margin: auto;
+	padding: 14px 0;
 }
 
 .lenghtPicker {
