@@ -15,7 +15,7 @@ function updateColors() {
 	$('#colorPreview').css({'background': 'linear-gradient(90deg, ' + color1 + ', ' + color2 + ')'});
 }
 
-$('#colorSel1,#colorSel2').on('change', () => updateColors() );
+$('#colorSel1,#colorSel2').on('change', () => updateColors());
 
 /* copy colour on right click */
 $('#colorBtn1').bind('contextmenu', (cmenu) => {
@@ -52,7 +52,7 @@ function rndColors() {
 	updateColors();
 }
 
-$('#rndColorsBtn').on('click', () => rndColors() );
+$('#rndColorsBtn').on('click', () => rndColors());
 
 
 
@@ -68,7 +68,7 @@ function swapColors() {
 	updateColors();
 }
 
-$('#swapColorsBtn').on('click', () => swapColors() );
+$('#swapColorsBtn').on('click', () => swapColors());
 
 
 
@@ -146,7 +146,7 @@ $('#cLenght3').on('click', () => {
 
 /* update steps */
 function updateSteps() {
-	console.log('[c]', 'Calculating colors for every step... ');
+	console.log('[c] Calculating colours for every step... ');
 
 	/* take steps count from non-custom button (must be at least 3, otherwise just makes no sense) */
 	if ($('#cLenght1').is(':checked')) stepLen = 9;
@@ -185,7 +185,7 @@ function updateSteps() {
 let stepLeaders = [], stepCount = 0;
 
 function genBlocks() {
-	console.log('[g]', 'Starting blocks gradient generation... ');
+	console.log('[g] Starting blocks gradient generation... ');
 
 	/* wipe all the blocks previously visualised if "optRKeep" is NOT enabled */
 	if (! $('#optRKeep').is(':checked')) $( ".visImg" ).remove();
@@ -217,14 +217,14 @@ function genBlocks() {
 
 	/* write current step leader to a corresponding stepLeaderX variable */
 	stepLeaders.push(stepLeaderboard[0]);
-	// console.log('[g -- step ' + stepCount + '], 'AAAND THE WINNER IS "' + stepLeaders[stepCount] + '" !!!');
+	//console.log('[g -- step ' + stepCount + '] AAAND THE WINNER IS "' + stepLeaders[stepCount] + '" !!!');
 
-	/* check for duplicate if "optNodub" is enabled and visualise block */
-	if ($('#optNodub').is(':checked') && stepCount > 0) {
-		if (stepLeaders[stepCount] != stepLeaders[stepCount -1]) blockVis();
-		} else { blockVis(); }
+	/* check for duplicates if "optNodub" is enabled and visualise block */
+	if ($('#optNodub').is(':checked') && stepCount > 0)
+		{ if (stepLeaders[stepCount] != stepLeaders[stepCount -1]) blockVis(); }
+		else blockVis();
 	}
-	console.log('[v]', 'Blocks gradient visualised successfully.');
+	console.log('[v] Blocks gradient visualised.');
 }
 
 
@@ -236,8 +236,8 @@ function blockVis() {
 	let stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 	const id = stepLeaders[stepCount];
 	const item = blockData.find(i => i.id === id.replace(".png"));
-	stepVis.attr('src', item?.imageData ? item.imageData : './data/blocks/' + blocksDir + '/' + stepLeaders[stepCount]);
-	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/\_/g, ' '));
+	stepVis.attr('src', item?.imageData ? item.imageData : './data/blocksets/' + blockset + '/' + stepLeaders[stepCount]);
+	stepVis.attr('blockname', stepLeaders[stepCount].replace('.png', '').replace(/[-._]/g, ' '));
 	stepVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
 
 	stepVis.appendTo('#visResult');
@@ -267,7 +267,7 @@ function showPopup(block) {
 }
 
 /* hide popup when block is not hovered */
-function hidePopup(block) {
+function hidePopup() {
 	$('#visPopup').html('MissingNo');
 	$('#visPopup').hide();
 }
@@ -277,48 +277,40 @@ function hidePopup(block) {
 
 
 /* default values for block types and data */
-var blocksType = 'blocks_mcje';
-var blockData = eval('blocks_mcje');
+var blockset = 'blocks';
+var blockData = eval('blocks');
 var presetsLocation = eval('presets');
-var blocksDir = 'mcje';
 
 /* presets importer */
 function presetImport() {
 	/* wipe previous presets */
 	$("option").remove();
 
-	/* create 'Default (1.18 blocks)' option if blocksType = blocks */
-	if (blocksType == 'blocks_mcje') {
+	/* create 'Default (1.18 blocks)' option if blockset = blocks */
+	if (blockset == 'blocks') {
 		$('#blocksPresetDD').append(
 			$(document.createElement('option')).prop({
-				value: 'blocks_mcje',
+				value: 'blocks',
 				text: 'Default (1.18 blocks)'
 		}));
-	$('#blocksPresetDD').val('blocks_mcje');
+	$('#blocksPresetDD').val('blocks');
 	blockData = eval( $('#blocksPresetDD').val() );
 	}
 
-	/* create 'Default (1.12.2 blocks)' option if blocksType = blocks_mcje_pa */
-	if (blocksType == 'blocks_mcje_pa') {
+	/* create 'Default (1.12.2 blocks)' option if blockset = blocks_pa */
+	if (blockset == 'blocks_pa') {
 		$('#blocksPresetDD').append(
 			$(document.createElement('option')).prop({
-				value: 'blocks_mcje_pa',
+				value: 'blocks_pa',
 				text: 'Default (1.12.2 blocks +1)'
 		}));
-	$('#blocksPresetDD').val('blocks_mcje_pa');
-	blockData = eval( $('#blocksPresetDD').val() );
+	$('#blocksPresetDD').val('blocks_pa');
+	blockData = eval( $('#blocksPresetDD').val());
 	}
 
 	var presetImporter = 0;
 
-	if (blocksType == 'blocks_mcje') {
-		presetsLocation = eval('presets');
-		blocksDir = 'mcje';
-	}
-	if (blocksType == 'blocks_mcje_pa') {
-		presetsLocation = eval('presets_pa');
-		blocksDir = 'mcje_pa';
-	}
+	presetDefaulter();
 
 	while (presetImporter < presetsLocation.length) {
 
@@ -330,37 +322,41 @@ function presetImport() {
 		presetImporter += 1;
 	}
 
-	/* when all the presets imported, add 'Custom preset...' and 'Custom blockset...' options */
+	/* add 'Custom preset...' option when all presets are imported */
 	$('#blocksPresetDD').append(
 		$(document.createElement('option')).prop({
 			value: 'customPreset',
 			text: 'Custom preset...'
-		}),
-		$(document.createElement('option')).prop({
-			value: 'customBlockset',
-			text: '[NEW] Custom blockset...'
-	}));
+		})
+	);
 }
 presetImport();
 
 /* preset selector */
 $('#blocksPresetDD').change( () => {
 	if (!$('#blocksPresetDD').val().includes("custom")) {
-		console.log('[p]', 'changed preset to "' + $('#blocksPresetDD').val() + '"');
+		console.log(`[p] Changed preset to "${$('#blocksPresetDD').val()}"`);
 		blockData = eval( $('#blocksPresetDD').val() );
 }});
 
+/* preset defaulter */
+function presetDefaulter() {
+	blockset == 'blocks_pa' ? $('#blocksPresetDD').val('blocks_pa') : $('#blocksPresetDD').val('blocks');
+	blockData = eval( $('#blocksPresetDD').val() );
+	if (blockset == 'blocks') presetsLocation = eval('presets');
+	if (blockset == 'blocks_pa') presetsLocation = eval('presets_pa');
+}
 
 
 
 
-/* сustom blockset (a huge thanks to @NobUwU for implementing this) */
-// Create Temporary Canvas
+
+/* сustom blocksets (a huge thanks to @NobUwU for implementing this) */
 const tempCanvas = document.createElement("canvas");
 
-// Get Temporary Context
+/* create temp canvas */
 const tempContext = tempCanvas.getContext('2d');
-console.log("[p]", "Temporary context created");
+//console.log('[b] Temporary context created');
 
 function readFile(file) {
 	return new Promise((r,j) => {
@@ -371,105 +367,140 @@ function readFile(file) {
 	});
 }
 
-let customBlockset = [];
+let customBlocksetTemp = [], customBlockset = [];
 async function onDirectoryChange(d) {
 	/**
 	 * @type {File[]}
 	 */
 	const files = Array.from(d.files).filter(i => /(image\/png|image\/jpeg)/.test(i.type) && !i.type.includes("gif"));
 
-	if (!files.length) {
-		// Failed
-		return;
-	} else {
+	if (!files.length) return;
+	else {
+		/* wipe current blockset only if at least 1 image was uploaded */
+		if ($('#CBCustomBlocks').html() == []) { 
+			//console.log('[b] Custom blockset wiped successfully.'); 
+			blockData = [], customBlockset = []; 
+		}
+
 		async function wait(ms) {
 			return new Promise((r) => setTimeout(() => r(), ms));
 		}
 
 		for (const file of files) {
 			try {
-				// Await Read File
+				/* await read file */
 				const f = await readFile(file);
 
-				// Use base64 Data To Create New Image
+				/* use base64 data to create new image */
 				const image = new Image();
 				image.src = f.target.result;
 
-				// Once Image Is Loaded Continue
+				/* once image is loaded continue */
 				image.onload = function () {
-					// Draw Image To Temporary Context
+					/* draw image to temporary context */
 					tempContext.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height);
 
-					// await wait(2);
+					//await wait(2);
 
-					// Get RGBA Of Image
+					/* get RGBA of image */
 					const rgba = tempContext.getImageData(0, 0, 1, 1).data;
+					/* get RGB From RGBA */
+					const rgb = [rgba[0], rgba[1], rgba[2]];
 
-					// Append Image Custom Blocks View
+					/* append image custom blocks view */
 					const img = $(`<img class="CBSelVisImg" src="${f.target.result}" alt="${file.name}"/>`);
+					img.css({'width': visSize + 'px', 'height': visSize + 'px'});
 					img.appendTo("#CBCustomBlocks");
 
-					// Get Name Remove Extension
+					/* get name remove extension */
 					let name = file.name.split(".");
 					name.pop();
 					name = name.join(".");
+					//console.log('[b] Successfully read file "' + file.name + '"');
 
-					// Get RGB From RGBA
-					const rgb = [rgba[0], rgba[1], rgba[2]];
-
-					// Push Texture To customBlockset Array
+					/* push data to customBlockset array */
 					customBlockset.push({id: name, rgb, imageData: f.target.result});
-
-					console.log("[p]", "Successfully read file", file.name);
 				}
-			} catch (err) {
-				console.log("[p]", "Failed to read file", file.name, err);
-			}
+			} catch(err) { console.log(`[b] Failed to read file "${file.name}" (error: "${err}")`); }
 		}
+		console.log(`[b] Generated custom blockset out of ${customBlockset.length + 1} block(s):`, customBlockset);
 
-		if (customBlockset.length > 0) {
-			// Allow Confirm
-			CBConfirmUpdater(false);
-		}
+		/* allow confirm if 1 or more images are loaded;
+		we add +1 because check happens before picture appends to list, 
+		and the least amount possible to upload is 1 image */
+		if (customBlockset.length + 1 >= 0) CBConfirmUpdater(false); 
+
 	}
 }
 
-$('#blocksPresetDD').change( () => {
-	if ($('#blocksPresetDD').val() == 'customBlockset') {
+/* custom blocksets button */
+$('#CBBtn').on('click', () => {
+		//$('#blocksPresetDD').text() = '(unavailable for custom blocksets)';
 		$('#CBSelScreen').fadeIn(300);
-		var BPickBlocksVis = 0;
 		$('#CBSelScreenVis').html('');
 
-		blockData = [];
-		customBlockset = [];
 		CBConfirmUpdater(true);
 
 		const CBInput = $('<div><input type="file" id="CBSelScreenDirectorySelector" onchange="onDirectoryChange(this)" accept="image/png, image/jpeg" multiple/></div>');
 		CBInput.appendTo('#CBSelScreenVis');
 		const CBBlock = $('<div id="CBCustomBlocks"></div>');
 		CBBlock.appendTo('#CBSelScreenVis');
-
 	}
-})
+);
+
+/* custom blocksets confirm button */
 $('#CBSelScreenConfirm').on('click', () => {
 	$('#CBSelScreen').fadeOut(300);
+
 	CBConfirmUpdater(true);
+
 	blockData = customBlockset;
-})
+	console.log('[b] Custom blockset applied.')
+
+	/* disable some stuff and add 'inuse' attr to CBBtn */
+	$('#blocksPresetDD').prop('disabled', true);
+	$('#blocksetSwitcher').prop('disabled', true);
+	$('#CBBtn').attr('inuse', true);
+
+	/* use special preset */
+	$('#blocksPresetDD').html('');
+	$('#blocksPresetDD').append(
+		$(document.createElement('option')).prop({
+			value: 'customBlockset',
+			text: 'unavailable for custom blocksets'
+	}));
+});
+
+/* custom blockset cancel button */
 $('#CBSelScreenClose').on('click', () => {
-	if (blocksType == 'blocks_mcje_pa') {$('#blocksPresetDD').val('blocks_mcje_pa')} else {$('#blocksPresetDD').val('blocks_mcje')};
 	blockData = eval( $('#blocksPresetDD').val() );
-	console.log('[p]', `custom blockset canceled. Changing type back to "${blocksType}"`);
 	CBConfirmUpdater(true);
 	$('#CBSelScreen').fadeOut(300);
 	customBlockset = [];
-})
-function removeFileUpload() {
-	$('#CBSelScreenDirectorySelector').remove();
-}
+});
+
+/* custom blockset confirm button updater */
 function CBConfirmUpdater(i) {
 	$('#CBSelScreenConfirm').prop('disabled', i);
 }
+
+/* custom blockset reverter */
+$('#blocksetSwitcherHandler').on('click', () => {
+	if ($('#blocksetSwitcher').is(':disabled')) {
+		/* re-import and re-default presets */
+		presetImport();
+		presetDefaulter();
+		customBlockset = [];
+
+		/* enable everything back and remove 'inuse' attr from CBBtn */
+		$('#blocksPresetDD').prop('disabled', false);
+		$('#CBBtn').removeAttr('inuse');
+		$('#blocksetSwitcher').prop('disabled', false);
+
+		/* do not switch blockset selected before */
+		return false;
+	}
+});
 
 
 
@@ -478,12 +509,10 @@ function CBConfirmUpdater(i) {
 /* custom preset blocks selection screen */
 $('#blocksPresetDD').change(() => {
 	if ($('#blocksPresetDD').val() == 'customPreset') {
-		blocksType == 'blocks_mcje_pa' ? $('#blocksPresetDD').val('blocks_mcje_pa') : $('#blocksPresetDD').val('blocks_mcje');
-		blockData = eval( $('#blocksPresetDD').val() );
-		console.log('[p]', 'custom preset selected, temporarily changed to "' + $('#blocksPresetDD').val() + '"');
+		presetDefaulter();
+		CPBlockUpdater();
 
 		$('#CPSelScreen').fadeIn(300);
-		let BPickBlocksVis = 0;
 		$('#CPSelScreenVis').html('');
 
 		/* visualise all the available blocks in alphabetic order */
@@ -517,31 +546,29 @@ $('#blocksPresetDD').change(() => {
 			/* add an image to the label */
 			var CPSelVis2 = $('<img class="CPSelVisImg" id="' + blockData[CPSelBlocksVis].id.replace('.', '・') + 'Img" onclick="CPBlockUpdater(' + "this.getAttribute('blockid'), this.getAttribute('blockrgb')" + ');" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">')
 
-			CPSelVis2.attr('src', './data/blocks/' + blocksDir + '/' + blockData[CPSelBlocksVis].id);
+			CPSelVis2.attr('src', './data/blocksets/' + blockset + '/' + blockData[CPSelBlocksVis].id);
 			CPSelVis2.attr('blockname', blockData[CPSelBlocksVis].id.replace('.png', '').replace(/\_/g, ' '));
 			CPSelVis2.attr('blockid', blockData[CPSelBlocksVis].id);
 			CPSelVis2.attr('blockrgb', blockData[CPSelBlocksVis].rgb[0] + '|' + blockData[CPSelBlocksVis].rgb[1] + '|' + blockData[CPSelBlocksVis].rgb[2]);
 			CPSelVis2.css({'width': visSize + 'px', 'height': visSize + 'px'});
 
 			CPSelVis2.appendTo(CPSelVis);
-}}})
+}}});
 
 /* check if at least one block is selected (used for confirm button activation/deactivation) */
-function CPBlockUpdater(blockid, blockrgb) {
+function CPBlockUpdater() {
 	setTimeout( () => {
 		$('.CPSelVis:checked').length <= 0
 		? $('#CPSelScreenConfirm').prop('disabled', true)
 		: $('#CPSelScreenConfirm').prop('disabled', false)
-	}, 20)
-};
+	}, 20);
+}
 
-let CPBlocks = [];
-/* custom blocks screen confirm button */
-$('#CPSelScreenConfirm').on('click', () => {
-	$('#CPSelScreen').fadeOut(300);
 
-	/* wipe previous custom preset */
-	CPBlocks = [];
+
+/* selected blocks parser */
+function CPBlocksParser() {
+	let CPParsedBlocks = [];
 
 	/* get array of all checked blocks */
 	let CPSelectedBlocks = $('.CPSelVis:checked'), CPSelectedBlocksPart = [];
@@ -555,37 +582,48 @@ $('#CPSelScreenConfirm').on('click', () => {
 			parseInt($('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockrgb').split('|')[1]),
 			parseInt($('#' + CPSelectedBlocks[currentCPSelectedBlock].id + 'Img').attr('blockrgb').split('|')[2])
 		]}
-
-		/* push generated array to the custom preset */
-		CPBlocks.push(CPSelectedBlocksPart);
+	CPParsedBlocks.push(CPSelectedBlocksPart);
 	}
+	console.log(`[p] Parsed ${CPParsedBlocks.length} block(s) as preset array: `, CPParsedBlocks);
+	return CPParsedBlocks;
+}
+
+/* custom presets confirm button */
+$('#CPSelScreenConfirm').on('click', () => {
+	$('#CPSelScreen').fadeOut(300);
+
+	let CPBlocks = CPBlocksParser();
+
+	/* push generated array to the custom preset */
 	$('#blocksPresetDD').val('customPreset');
 	blockData = CPBlocks;
 
-	console.log('[p]', 'custom preset generated successfully! changed to "' + $('#blocksPresetDD').val() + '"');
-	// console.log('[p]', custom);
-})
+	console.log(`[p] Custom preset generated, changed to "${$('#blocksPresetDD').val()}"`);
+	//console.log('[p]', custom);
+});
 
-/* custom blocks screen cancel button */
+/* custom presets cancel button */
 $('#CPSelScreenClose').on('click', () => {
-	console.log('[p]', 'custom preset canceled.');
+	console.log('[p] Custom preset cancelled.');
 	$('#CPSelScreen').fadeOut(300);
-})
+	CPBlockUpdater();
+});
 
 
 
 
 
-/* blocks type switcher */
-function blocksTypeSwitch() {
-	if ($('#blocksTypeSwitcher').is(':checked')) blocksType = 'blocks_mcje_pa';
-	if (! $('#blocksTypeSwitcher').is(':checked')) blocksType = 'blocks_mcje';
+/* blockset switcher */
+function blocksetSwitch() {
+	if ($('#blocksetSwitcher').is(':checked')) blockset = 'blocks_pa';
+	if (! $('#blocksetSwitcher').is(':checked')) blockset = 'blocks';
 
 	presetImport();
-	console.log('[p]', 'blocks type changed to "' + blocksType + '", reverted to "' + $('#blocksPresetDD').val() + '"');
+
+	console.log(`[p] Blockset changed to "${blockset}", reverted to "${$('#blocksPresetDD').val()}"`);
 };
 
-$('#blocksTypeSwitcher').on('click', () => blocksTypeSwitch() );
+$('#blocksetSwitcher').on('click', () => blocksetSwitch());
 
 
 
@@ -603,9 +641,9 @@ function colorBPick(color) {
 	BPickSCV = color;
 
 	/* visualise all the blocks available  */
-	BPickBlocksVis = blockData.length -1;
 	var BPickVisLetter = 'ибражы';
-	while (BPickBlocksVis >= 0) {
+
+	for (BPickBlocksVis = blockData.length -1; BPickBlocksVis >= 0; BPickBlocksVis--) {
 		if (BPickVisLetter != blockData[BPickBlocksVis].id[0]) {
 			if (BPickBlocksVis != blockData.length -1) {
 				BPickVis = $('</div>');
@@ -618,7 +656,7 @@ function colorBPick(color) {
 		var BPickVis = $('<img class="BPickVisImg" onclick="' + "BPickSelect(this.getAttribute('blockid'));" + '" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 
 		/* add essential attributes */
-		BPickVis.attr('src', blockData[BPickBlocksVis].imageData ? blockData[BPickBlocksVis].imageData : './data/blocks/' + blocksDir + '/' + blockData[BPickBlocksVis].id);
+		BPickVis.attr('src', blockData[BPickBlocksVis].imageData ? blockData[BPickBlocksVis].imageData : './data/blocksets/' + blockset + '/' + blockData[BPickBlocksVis].id);
 		BPickVis.attr('blockname', blockData[BPickBlocksVis].id.replace('.png', '').replace(/\_/g, ' '));
 		BPickVis.attr('blockid', blockData[BPickBlocksVis].id);
 
@@ -626,24 +664,23 @@ function colorBPick(color) {
 		BPickVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
 
 		BPickVis.appendTo('#BPickVisLetter' + blockData[BPickBlocksVis].id[0]);
-		BPickBlocksVis -= 1;
 }}
 
-$('#colorBPick1').on('click', () => colorBPick('color1') );
-$('#colorBPick2').on('click', () => colorBPick('color2') );
+$('#colorBPick1').on('click', () => colorBPick('color1'));
+$('#colorBPick2').on('click', () => colorBPick('color2'));
 
-/* bpick screen block selection */
+/* BPick screen block selection */
 function BPickSelect(blockid) {
 	var BPickSelectedBlockResult = blockData.filter((bdblock) => bdblock.id == blockid);
 
-	if (BPickSCV == 'color1') {	$('#colorSel1').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]))};
-	if (BPickSCV == 'color2') {	$('#colorSel2').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]))};
+	if (BPickSCV == 'color1') $('#colorSel1').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]));
+	if (BPickSCV == 'color2') $('#colorSel2').val(rgbToHex(BPickSelectedBlockResult[0].rgb[0],BPickSelectedBlockResult[0].rgb[1],BPickSelectedBlockResult[0].rgb[2]));
 
 	updateColors();
 	$('#BPickScreen').fadeOut(300);
-};
+}
 
-/* bpick screen cancel button */
+/* BPick screen cancel button */
 $('#BPickScreenClose').on('click', () => $('#BPickScreen').fadeOut(300) );
 
 
@@ -658,7 +695,7 @@ function genGradient() {
 	$('#ggBtn').prop('disabled', false);
 }
 
-$('#ggBtn').on('click', () => genGradient() );
+$('#ggBtn').on('click', () => genGradient());
 
 
 
@@ -669,7 +706,7 @@ console.log('*boop* main script initialized');
 
 /* le final countdown */
 $(document).ready(function() {
-	/* randomize colours on startup if no cached colours available; otherwise just update colors */
+	/* randomize colours on startup if no cached colours available; otherwise just update colours */
 	color1 = $('#colorSel1').val();
 	color2 = $('#colorSel2').val();
 	(color1 == '#000000', color2 == '#000000') ? rndColors() : updateColors();
@@ -677,3 +714,4 @@ $(document).ready(function() {
 	/* enable GG button when the script is ready */
 	$("#ggBtn").prop("disabled", false);
 })
+

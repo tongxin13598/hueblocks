@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700');
 
-body {
+html, body {
 	margin: 0;	padding: 0;
 	overflow-x: hidden;
+	background-color: #181818;	color: #fff;
 	font-family: 'Open Sans', sans-serif;	font-size: 14px;
-	background-color: #181818;
-	color: #fff;
+	color-scheme: dark;
 }
 header {
 	display: block;
@@ -36,6 +36,12 @@ a:hover {
 }
 a:hover:active {
 	color: #fff !important;
+}
+small {
+	background: #fff;	color: #181818;
+	font-size: 12.5px;	font-weight: 900;
+	padding: 1px 4px;
+	border-radius: 4px;
 }
 
 #colorPreview {
@@ -135,14 +141,12 @@ a:hover:active {
 #cLenghtBtn1, #cLenghtBtn2, #cLenghtBtn3 {
 	display: inline-block;
 	width: 124px;
-	margin: -4px 8px 4px;
-	padding: 11px 0;
+	margin: -4px 8px 4px;	padding: 11px 0;
 	user-select: none;
 	transition: 200ms;
 	font-weight: 700;
 	background-color: transparent;
-	border: 2px solid #fff9;
-	border-radius: 4px;
+	border: 2px solid #fff9;	border-radius: 4px;
 	box-shadow: 0 0 0 0 #fff0;
 }
 #cLenghtBtn1:hover, #cLenghtBtn2:hover, #cLenghtBtn3:hover {
@@ -202,7 +206,7 @@ a:hover:active {
 .ggBtnHandler {
 	width: 100%;
 	text-align: center;
-	margin-top: -33px;
+	margin-top: -32px;
 }
 #ggBtn {
 	appearance: none;
@@ -229,18 +233,11 @@ a:hover:active {
 	color: #181818;
 	box-shadow: 0 0 0 2px #666;
 }
-.bottomTip {
-	display: inline-block;
-	position: absolute;
-	width: 100%;
-	text-align: center;
-	margin-top: 2px;
-}
 
 .visScaleBtns {
 	position: absolute;
 	right: 20px;
-	margin-top: -52px;
+	margin-top: -72px;
 	background-color: #181818;
 	box-shadow: 0 0 0 2px #181818;
 	border-radius: 1280px;
@@ -270,17 +267,17 @@ a:hover:active {
 	padding: 20px;
 }
 .visImg {
-	width: 64px;	height: 64px;
+	width: 64px;
+	height: 64px;
 	image-rendering: pixelated;			/* for Chromium-based browsers */
 	image-rendering: crisp-edges;		/* for Firefox-based browsers */
 	margin-bottom: -4px;
+	display: inline-block;
 }
 #visPopup {
-	display: none;
-	position: absolute;
+	display: none;	position: absolute;
 	padding: 1px 8px 3px;	
-	background: #242135cc;
-	color: #fff;
+	background: #242135cc;	color: #fff;
 	border-radius: 0 10px 10px 10px;
 	box-shadow: 0px 1px 3px #0004;
 	font-size: 13px;
@@ -293,18 +290,18 @@ a:hover:active {
 	width: 100%;	height: 100%;
 	top: 0%;
 	overflow-x: hidden;
-	background-color: rgba(0, 0, 0, 0.9);
+	background-color: #181818cc;
 }
 /* If Supports backdrop-filter reduce bg alpha and use blur */
 @supports (backdrop-filter: none) {
 	#CPSelScreen, #BPickScreen, #CBSelScreen {
 		backdrop-filter: blur(3px);
-		background-color: rgba(0, 0, 0, 0.2);
+		background-color: #0004;
 	}
 }
 #CPSelScreenVis, #BPickScreenVis, #CBSelScreenVis {
 	margin: 80px;
-	text-align: center;
+	/* text-align: center; */
 	overflow: hidden;
 }
 .CPSelVisLetterSeparator, .BPickVisLetterSeparator {
@@ -330,13 +327,18 @@ a:hover:active {
 }
 
 #CBSelScreenDirectorySelector {
-	margin-bottom: 1rem;
+	display: block;
+	margin: 0 auto 25px;
+	text-align: center;
 }
 
-#CPSelScreenClose, #CPSelScreenConfirm, #BPickScreenClose, #CBSelScreenClose, #CBSelScreenConfirm {
+.FSBtnsHolder {
 	position: fixed;
-	top: 20px; right: 20px;
-	margin: 2px;
+	top: 18px;	right: 18px;
+	display: flex;	flex-direction: column;
+}
+.FSBtnsHolder button {
+	margin: 4px;
 	width: 40px;	height: 40px;
 	background-color: transparent;
 	border: 2px solid #666;	border-radius: 1280px;
@@ -344,32 +346,27 @@ a:hover:active {
 	transition: 200ms;
 	user-select: none;
 }
-#CPSelScreenConfirm, #CBSelScreenConfirm {
-	top: 68px;
+.FSBtnsHolder button img {
+	margin-top: 2px;
 }
 #CPSelScreenClose img, #BPickScreenClose img, #CBSelScreenClose img {
-	margin-top: 2px;
 	transform: rotate(45deg);
 }
-#CPSelScreenConfirm img, #CBSelScreenConfirm img {
-	margin-top: 2px;
-}
-#CPSelScreenClose:hover, #CPSelScreenConfirm:hover, #BPickScreenClose:hover, #CBSelScreenClose:hover, #CBSelScreenConfirm:hover {
+.FSBtnsHolder button:hover {
 	border: 2px solid #a1a3b3;
-	cursor: pointer;
 }
-#CPSelScreenClose:hover:active, #CPSelScreenConfirm:hover:active, #BPickScreenClose:hover:active, #CBSelScreenClose:hover:active, #CBSelScreenConfirm:hover:active {
+.FSBtnsHolder button:hover:active {
 	border: 4px solid #a1a3b366;
 	background-color: #3339;
 	transition: 50ms;
 }
-#CPSelScreenClose:disabled, #CPSelScreenConfirm:disabled, #BPickScreenClose:disabled, #CBSelScreenClose:disabled, #CBSelScreenConfirm:disabled {
+.FSBtnsHolder button:disabled {
 	border: 0px solid #66666666 !important;
 	background-color: #66666666 !important;
 	transition: 200ms !important;
 	cursor: not-allowed;
 }
-#CPSelScreenClose:disabled img, #CPSelScreenConfirm:disabled img, #BPickScreenClose:disabled img, #CBSelScreenClose:disabled img, #CBSelScreenConfirm:disabled img {
+.FSBtnsHolder button:disabled img {
 	opacity: 0.5 !important;
 }
 
@@ -389,8 +386,9 @@ a:hover:active {
 }
 
 .bottomConfigs {
-	max-width: 720px;
-	margin: auto;	padding: 22px 0 0px;
+	max-width: 800px;
+	margin: auto;
+	padding: 2px 0 0px;
 	text-align: center;
 	font-weight: 900;
 }
@@ -400,31 +398,45 @@ a:hover:active {
 	margin-left: 4px;	padding-left: 8px;
 	border: 2px solid #666;	border-radius: 1280px;
 	background: #181818;	background-image: linear-gradient(90deg, #fff 80%, #fff0 92%);
-	-webkit-background-clip: text;	-webkit-text-fill-color: transparent;	-moz-background-clip: text;	-moz-text-fill-color: transparent;
+	background-clip: text;	-webkit-background-clip: text;	-webkit-text-fill-color: transparent;-moz-background-clip: text;	-moz-text-fill-color: transparent;
 	font-family: 'Open Sans', sans-serif;	font-size: 12px;	font-weight: 600;
 	transition: 200ms;
 	outline: none;
 
 }
-#blocksPresetDD:hover {
+#blocksPresetDD:not(:disabled):hover {
 	border-color: #a1a3b3;
 }
-#blocksPresetDD:focus, #blocksPresetDD:active {
+#blocksPresetDD:not(:disabled):focus, #blocksPresetDD:not(:disabled):active {
 	border: 4px solid #4e4f56;
 	background-color: #3339;
 	transition: 50ms;
 	padding-left: 6px;
 }
-.bottomConfigs img {
+#blocksPresetDD:disabled {
+	background-image: linear-gradient(90deg, #666, #666);
+	color: #444 !important;
+	border: 2px solid #444 !important;
+	padding-left: 8px !important;
+}
+#blocksPresetDDArrow {
 	position: absolute;
-	margin-top: 3px;	margin-left: -24px;	padding: 5px;
+	margin-top: 3px;	margin-left: -25px;	padding: 5px;
 	border-radius: 1280px;
 	pointer-events: none;
 }
-/* #blocksTypeSwitcher {
+
+#blocksetSwitcherHandler {
+	display: inline-flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-content: center;
+	align-items: center;
+}
+/* #blocksetSwitcher {
 	display: none;
 }
-#blocksTypeSwitcherBtn {
+#blocksetSwitcherBtn {
 	display: inline-block;
 	position: relative;
 	width: 48px;	height: 23px;
@@ -434,11 +446,11 @@ a:hover:active {
 	transition: 200ms;
 	user-select: none;
 }
-input:hover + #blocksTypeSwitcherBtn {
+input:hover + #blocksetSwitcherBtn {
 	background: #181818;
 	border: 2px solid #a1a3b3;
 }
-#blocksTypeSwitcherBtn:before {
+#blocksetSwitcherBtn:before {
 	position: absolute;
 	left: 5px;
 	bottom: 5px;
@@ -451,34 +463,34 @@ input:hover + #blocksTypeSwitcherBtn {
 	box-shadow: 0px 0px 0px 2px #fff9;
 	transition: 300ms;
 }
-input:hover + #blocksTypeSwitcherBtn:before {
+input:hover + #blocksetSwitcherBtn:before {
 	background-color: #fff;
 	border: 2px solid #a1a3b3;
 	box-shadow: 0px 0px 0px 2px #fff;
 }
-input:checked + #blocksTypeSwitcherBtn:before {
+input:checked + #blocksetSwitcherBtn:before {
   transform: translateX(25px);
 } */
-#blocksTypeSwitcher {
+#blocksetSwitcher {
 	display: none;
 }
-#blocksTypeSwitcherBtn {
-	display: inline-block;
-	position: relative;
+#blocksetSwitcherBtn {
+	display: inline-block;	position: relative;
 	width: 48px;	height: 2px;
 	background: #fff3;
-	margin: 0 4px 3px;
+	margin: 0 7px -3px;
 	transition: 200ms;
 	user-select: none;
 	font-size: 0px;
+	order: 2;
 }
-input:hover + #blocksTypeSwitcherBtn {
+input:hover + #blocksetSwitcherBtn {
 	background: #fff6;
 }
-input:hover:active + #blocksTypeSwitcherBtn {
+input:hover:active + #blocksetSwitcherBtn {
 	background: #fff3;
 }
-#blocksTypeSwitcherBtn::before {
+#blocksetSwitcherBtn::before {
 	position: absolute;
 	left: 2px;	top: -6px;
 	content: '';
@@ -488,24 +500,99 @@ input:hover:active + #blocksTypeSwitcherBtn {
 	box-shadow: 0px 0px 0px 2px #fff9;
 	transition: 300ms;
 }
-input:hover + #blocksTypeSwitcherBtn::before {
+input:not(:disabled):hover + #blocksetSwitcherBtn::before {
 	background-color: #fff;
 	border: 2px solid #a1a3b3;
 	box-shadow: 0px 0px 0px 2px #fff;
 }
-input:hover:active + #blocksTypeSwitcherBtn::before {
+input:not(:disabled):hover:active + #blocksetSwitcherBtn::before {
 	background-color: #ccc;
 	border: 2px solid #fff;
 	box-shadow: 0px 0px 0px 2px #a1a3b366;
 }
-input:checked + #blocksTypeSwitcherBtn::before {
+input:not(:disabled):checked + #blocksetSwitcherBtn::before {
   transform: translateX(31px);
 }
-#blocksTypeSwitcherBtn::after {
+/* input:disabled + #blocksetSwitcherBtn::before {
+	left: 7px;	top: 1px;
+	width: 0px;	height: 0px;
+	border: 0px solid #666;
+	box-shadow: none;
+} */
+input:disabled + #blocksetSwitcherBtn::before {
+	left: 7px;	top: -1px;
+	width: 0px;	height: 0px;
+	transform: translateX(15px);
+	border-color: #fff;
+	box-shadow: 0px 0px 0px 2px #fff9;
+}
+input:disabled:hover + #blocksetSwitcherBtn::before {
+	border-color: #fff;
+	box-shadow: 0px 0px 0px 2px #fff;
+}
+input:disabled:hover:active + #blocksetSwitcherBtn::before {
+	border-color: #a1a3b3;
+	box-shadow: 0px 0px 0px 2px #ccc;
+}
+
+#blocksetSwitcher ~ label {
+	transition: 300ms;
+}
+#blocksetSwitcher:not(:checked) ~ label:nth-of-type(3) {
+	color: #ddd;
+}
+#blocksetSwitcher:checked ~ label:nth-of-type(2) {
+	color: #ddd;
+}
+#blocksetSwitcher:disabled ~ label {
+	color: #aaa !important;
+}
+
+#blocksetSwitcherBtn::after {
 	position: absolute;
 	content: '';
 	left: -2px;	top: -10px;
 	width: 52px;	height: 22px;
 	background-color: #fff0;
+}
 
+#CBBtn {
+	background: #fff0; color: #ddd;
+	height: 28px;
+	padding: 0 2px 2px 2px;
+	border: 2px solid #fff0;	border-radius: 4px;
+	font-family: 'Open Sans', sans-serif;	font-size: 14px;	font-weight: 600;
+	transition: 200ms;
+}
+#CBBtn:hover {
+	background: #fff3;
+	border: 2px solid #fff0;
+}
+#CBBtn:hover:active {
+	background: #fff6;
+	border: 2px solid #fff3;
+}
+#CBBtn img {
+	margin: 0 2px -3px 0;
+	transform: rotate(0deg);
+	transition: 300ms;
+}
+#CBBtn:hover img {
+	transform: rotate(157.5deg);
+}
+#CBBtn[inuse] {
+	background: #fff;	color: #151942;
+	box-shadow: 0 0 0 2px #fff3;
+}
+#CBBtn[inuse]:active {
+	background: #fff;
+	box-shadow: 0 0 0 2px #fff9;
+}
+#CBBtn[inuse] img {
+	filter: invert(0.8);
+}
+/* remove when out of beta */
+#CBBtn[inuse] small {
+	background: #333;
+	color: #fff;
 }

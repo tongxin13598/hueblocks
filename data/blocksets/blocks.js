@@ -1,6 +1,6 @@
 /* generated at 2021-07-27 20:02:31.889543 */
 
-var blocks_mcje = [
+var blocks = [
 	{ id: "yellow_wool.png", rgb: [249, 198, 40] },
 	{ id: "yellow_terracotta.png", rgb: [186, 133, 35] },
 	{ id: "yellow_shulker_box.png", rgb: [249, 190, 30] },

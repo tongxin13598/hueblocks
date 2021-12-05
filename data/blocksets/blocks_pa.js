@@ -1,6 +1,6 @@
 /* generated at 2021-09-13 11:09:10.826672 */
 
-var blocks_mcje_pa = [
+var blocks_pa = [
 	{ id: "wool_colored_yellow.png", rgb: [249, 198, 40] },
 	{ id: "wool_colored_white.png", rgb: [234, 236, 237] },
 	{ id: "wool_colored_silver.png", rgb: [142, 142, 135] },

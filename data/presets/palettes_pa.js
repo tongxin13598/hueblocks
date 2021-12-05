@@ -155,9 +155,7 @@ var grayscale_pa = [
 	{ id: "bedrock.png", rgb: [84, 84, 84] }
 ];
 
-/* bg changer easter egg */
-window.addEventListener('click', function (clickCnt) {
-    if (clickCnt.detail == 7) {$('header').css({'background': 'linear-gradient(' + Math.random()*360 + 'deg, rgba(' + Math.random()*360 + ',' + Math.random()*360 + ',' + Math.random()*360 + '), rgba(' + Math.random()*256 + ',' + Math.random()*256 + ',' + Math.random()*256 + '))'})}});
+let clickCnt = 0; $('#logo').on('click', () => { clickCnt++; if (clickCnt > Math.random()*20 ) { $('header').css({'background': 'linear-gradient(' + Math.random()*360 + 'deg, rgba(' + Math.random()*360 + ',' + Math.random()*360 + ',' + Math.random()*360 + '), rgba(' + Math.random()*256 + ',' + Math.random()*256 + ',' + Math.random()*256 + '))'}); clickCnt = 0; }});
 
 var overworld_pa = [
 	{ id: "stone_granite.png", rgb: [153, 114, 99] },
