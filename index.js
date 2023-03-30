@@ -242,7 +242,7 @@ function copyToClipboard(text) {
 /* block visualisation */
 function blockVis() {
 	//let stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
-	let stepVis = $('<img class="visImg" onclick="copyToClipboard(\'' + stepLeaders[stepCount].replace('.png', '') + '\');" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
+	let stepVis = $('<img class="visImg" onclick="copyToClipboard(\'' + stepLeaders[stepCount].replace('.png', '') + '\');" ondblclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 	const id = stepLeaders[stepCount];
 	const item = blockData.find(i => i.id === id.replace(".png"));
 	stepVis.attr('src', item?.imageData ? item.imageData : './data/blocksets/' + blockset + '/' + stepLeaders[stepCount]);
@@ -250,6 +250,7 @@ function blockVis() {
 	stepVis.css({'width': visSize + 'px', 'height': visSize + 'px'});
 
 	stepVis.appendTo('#visResult');
+	
 }
 
 
