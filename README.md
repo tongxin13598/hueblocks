@@ -20,3 +20,6 @@ If you want to generate custom presets for your fork, you can use blox2rgb.py �
 
 <br><h1>Legal Notice</h1>
 <b>All the textures provided are taken directly from Minecraft Java Edition 1.18/1.12.2 and owned by Mojang Studios. I do not claim any rights on these, and all the textures provided are used only for demonstration purposes!</b>
+
+<br><h1>替换功能</h1>
+把原版中的点击图片隐藏方块，替换成点击图片获取图片ID。
