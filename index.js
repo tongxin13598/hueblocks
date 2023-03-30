@@ -228,12 +228,21 @@ function genBlocks() {
 }
 
 
+function copyToClipboard(text) {
+  const el = $('<textarea>').val(text).appendTo('body').select();
+  document.execCommand('copy');
+  el.remove();
+  
+  const message = $('<div>').text(`已复制到剪贴板：${text}`).appendTo('body');
+  message.hide().fadeIn(400).delay(2000).fadeOut(400, () => message.remove());
+}
 
 
 
 /* block visualisation */
 function blockVis() {
-	let stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
+	//let stepVis = $('<img class="visImg" onclick="$(this).hide(200);" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
+	let stepVis = $('<img class="visImg" onclick="copyToClipboard(\'' + stepLeaders[stepCount].replace('.png', '') + '\');" onmouseover="showPopup(this);" onmouseout="hidePopup(this);">');
 	const id = stepLeaders[stepCount];
 	const item = blockData.find(i => i.id === id.replace(".png"));
 	stepVis.attr('src', item?.imageData ? item.imageData : './data/blocksets/' + blockset + '/' + stepLeaders[stepCount]);
